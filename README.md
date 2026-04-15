@@ -4,13 +4,13 @@
 ![Papers](https://img.shields.io/badge/Papers-208-blue)
 ![Studies](https://img.shields.io/badge/Reviewed_Studies-165-orange)
 
-# <p align=center> This repository complements our survey paper "Automated Lumbar Spine Diagnostics via Vision–Language Foundation Models: A Systematic Mathematical Review of Architectures, Distillation Strategies and Clinical Deployment Pathways", submitted to [Medical Image Analysis](https://www.sciencedirect.com/journal/medical-image-analysis) (Elsevier). </p>
+# <p align=center> "Automated Lumbar Spine Diagnostics via Vision–Language Foundation Models: A Systematic Mathematical Review of Architectures, Distillation Strategies and Clinical Deployment Pathways" </p>
 
-Authors: [Rao Farhat Masood](https://orcid.org/0000-0001-9054-9192) and [Imtiaz Ahmad Taj](https://orcid.org/0000-0003-1813-5563)
+<!-- Authors: [Rao Farhat Masood](https://orcid.org/0000-0001-9054-9192) and [Imtiaz Ahmad Taj](https://orcid.org/0000-0003-1813-5563)
 
 Department of Electrical and Computer Engineering, Capital University of Science and Technology (CUST), Islamabad, Pakistan
 
-Corresponding author: farhatmasood.fm@gmail.com
+Corresponding author: farhatmasood.fm@gmail.com -->
 </p>
 
 ---
@@ -52,7 +52,7 @@ Vision–language models (VLMs) and large language models (LLMs) are increasingl
 
 <hr />
 
-# <p align=center>`Awesome VLMs & LLMs for Lumbar Spine Diagnostics`</p>
+# <p align=center>`VLMs & LLMs for Lumbar Spine Diagnostics`</p>
 
 A curated list of all **208 references** cited in the survey, organized by category (**in chronological order within each section**). We intend to regularly update this page with the latest relevant papers.
 
@@ -1130,17 +1130,17 @@ If you find this repository useful for your research, please cite our survey:
 @article{masood2026alsd_vlm_review,
   author  = {Rao Farhat Masood and Imtiaz Ahmad Taj},
   title   = {Automated Lumbar Spine Diagnostics via Vision--Language Foundation Models: A Systematic Mathematical Review of Architectures, Distillation Strategies and Clinical Deployment Pathways},
-  journal = {Medical Image Analysis},
+  journal = {TBD},
   year    = {2026},
-  note    = {Submitted}
+  note    = {Under-Finalization}
 }
 ```
 
 ---
 
-## Contact
+<!-- ## Contact
 
-For any questions or suggestions, please open an issue or contact [Rao Farhat Masood](mailto:farhatmasood.fm@gmail.com).
+For any questions or suggestions, please open an issue or contact [Rao Farhat Masood](mailto:farhatmasood.fm@gmail.com). -->
 
 ---
 
