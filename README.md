@@ -1,10 +1,10 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/farhatmasood/ALSD_VLM_Review)
 [![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
 [![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
-![Papers](https://img.shields.io/badge/Papers-208-blue)
+![Papers](https://img.shields.io/badge/Papers-213-blue)
 ![Studies](https://img.shields.io/badge/Reviewed_Studies-165-orange)
 
-# <p align=center> "Automated Lumbar Spine Diagnostics via Vision–Language Foundation Models: A Systematic Mathematical Review of Architectures, Distillation Strategies and Clinical Deployment Pathways" </p>
+# <p align=center> "Vision-Language Foundation Models for Lumbar Spine Diagnostics: A Systematic Review of Architectures, Knowledge Distillation and Clinical Deployment Pathways" </p>
 
 <!-- Authors: [Rao Farhat Masood](https://orcid.org/0000-0001-9054-9192) and [Imtiaz Ahmad Taj](https://orcid.org/0000-0003-1813-5563)
 
@@ -54,7 +54,7 @@ Vision–language models (VLMs) and large language models (LLMs) are increasingl
 
 # <p align=center>`VLMs & LLMs for Lumbar Spine Diagnostics`</p>
 
-A curated list of all **208 references** cited in the survey, organized by category (**in chronological order within each section**). We intend to regularly update this page with the latest relevant papers.
+A curated list of all **213 references** cited in the survey, organized by category (**in chronological order within each section**). We intend to regularly update this page with the latest relevant papers.
 
 We strongly encourage the researchers that want to promote their work to make pull requests to update their paper's information!
 
@@ -161,7 +161,7 @@ arXiv:2510.03318.<br>
 **Deep Learning Assisted Segmentation of the Lumbar Intervertebral Disc: A Systematic Review and Meta-Analysis.** [2024].<br>
 *A. Wang et al.*<br>
 Journal of Orthopaedic Surgery and Research, vol. 19(1), pp. 496.<br>
-[[PDF](https://doi.org/10.1186/s13018-024-04980-6)]
+[[PDF](https://doi.org/10.1186/s13018-024-05002-5)]
 
 **Advances in medical image segmentation: A comprehensive survey with a focus on lumbar spine applications.** [2025].<br>
 *A. Kabil, G. Khoriba, M. Yousef, E. A. Rashed.*<br>
@@ -358,6 +358,10 @@ Released 31 March 2026. Apache 2.0 licence.<br>
 
 # Medical Vision-Language Models
 
+**MedCLIP: Contrastive Learning from Unpaired Medical Images and Text.** [2022] [EMNLP].<br>
+*Z. Wang, Z. Wu, D. Agarwal, J. Sun.*<br>
+[[PDF](https://doi.org/10.18653/v1/2022.emnlp-main.256)]
+
 **Foundation models for generalist medical artificial intelligence.** [2023].<br>
 *M. Moor, O. Banerjee, Z. S. H. Abad, H. M. Krumholz, J. Leskovec, E. J. Topol, P. Rajpurkar.*<br>
 Nature, vol. 616(7956), pp. 259–265.<br>
@@ -424,9 +428,10 @@ Language Technology Lab, University of Cambridge.<br>
 *S. Bannur, S. Hyland, Q. Liu, F. Perez-Garcia, M. Ilse, D. C. Castro et al.*<br>
 [[PDF](https://doi.org/10.1109/CVPR52729.2023.01442)]
 
-**MedCLIP: Contrastive Learning from Unpaired Medical Images and Text.** [2022] [EMNLP].<br>
-*Z. Wang, Z. Wu, D. Agarwal, J. Sun.*<br>
-[[PDF](https://doi.org/10.18653/v1/2022.emnlp-main.256)]
+**DoctorGLM: Fine-Tuning your Chinese Doctor is not a Herculean Task.** [2023].<br>
+*H. Xiong, S. Wang, Y. Zhu, Z. Zhao, Y. Liu, Q. Wang, D. Shen.*<br>
+arXiv:2304.01097.<br>
+[[PDF](https://arxiv.org/abs/2304.01097)]
 
 **Towards Generalist Biomedical AI.** [2024].<br>
 *T. Tu, S. Azizi, D. Driess, M. Schaekermann, M. Amin, P.-H. Chang et al.*<br>
@@ -467,6 +472,15 @@ Nature Communications, vol. 15(1), pp. 8384.<br>
 arXiv:2404.18416.<br>
 [[PDF](https://arxiv.org/abs/2404.18416)]
 
+**RULE: Reliable Multimodal RAG for Factuality in Medical Vision Language Models.** [2024].<br>
+*P. Xia, K. Zhu, H. Li, H. Zhu, Y. Li, G. Li, L. Zhang, H. Yao.*<br>
+arXiv:2407.05131.<br>
+[[PDF](https://arxiv.org/abs/2407.05131)]
+
+**MedCoT: Medical Chain of Thought via Hierarchical Expert.** [2024] [EMNLP].<br>
+*J. Liu, Y. Wang, J. Du, J. T. Zhou, Z. Liu.*<br>
+[[PDF](https://aclanthology.org/2024.emnlp-main.962/)]
+
 **MedGemma Technical Report.** [2025].<br>
 *A. Sellergren et al.*<br>
 arXiv:2507.05201.<br>
@@ -486,10 +500,10 @@ arXiv:2410.02458. Accepted at CVAMD Workshop, ICCVW 2025.<br>
 *Y. Guo, W. Huang.*<br>
 [[PDF](https://doi.org/10.1109/CITSC64390.2025.00092)]
 
-**DoctorGLM: Fine-Tuning your Chinese Doctor is not a Herculean Task.** [2023].<br>
-*H. Xiong, S. Wang, Y. Zhu, Z. Zhao, Y. Liu, Q. Wang, D. Shen.*<br>
-arXiv:2304.01097.<br>
-[[PDF](https://arxiv.org/abs/2304.01097)]
+**Toward Expert-Level Medical Question Answering with Large Language Models.** [2025].<br>
+*K. Singhal, T. Tu, J. Gottweis et al.*<br>
+Nature Medicine, vol. 31, pp. 943–950.<br>
+[[PDF](https://doi.org/10.1038/s41591-024-03423-7)]
 
 **MedGemma 1.5 Technical Report.** [2026].<br>
 *A. Sellergren, C. Gao, F. Mahvar, T. Kohlberger, F. Jamil et al.*<br>
@@ -569,7 +583,7 @@ LNCS vol. 12962, pp. 272–284.<br>
 **Segment anything in medical images.** [2024].<br>
 *J. Ma, Y. He, F. Li, L. Han, C. You, B. Wang.*<br>
 Nature Communications, vol. 15(1), pp. 654.<br>
-[[PDF](https://doi.org/10.1038/s41467-023-44574-z)]
+[[PDF](https://doi.org/10.1038/s41467-024-44824-z)]
 
 **SAM-Med3D: Towards General-Purpose Segmentation Models for Volumetric Medical Images.** [2024].<br>
 *H. Wang, S. Guo, J. Ye, Z. Deng, J. Cheng, T. Li et al.*<br>
@@ -663,15 +677,15 @@ IEEE Journal of Biomedical and Health Informatics (Early access).<br>
 
 # Text-Based Medical Language Models
 
-**BioBERT: A pre-trained biomedical language representation model for biomedical text mining.** [2020].<br>
-*J. Lee, W. Yoon, S. Kim, D. Kim, S. Kim, C. H. So, J. Kang.*<br>
-Bioinformatics, vol. 36(4), pp. 1234–1240.<br>
-[[PDF](https://doi.org/10.1093/bioinformatics/btz682)]
-
 **Publicly Available Clinical BERT Embeddings.** [2019].<br>
 *E. Alsentzer, J. R. Murphy, W. Boag, W.-H. Weng, D. Jin, T. Naumann, M. B. A. McDermott.*<br>
 arXiv:1904.03323.<br>
 [[PDF](https://arxiv.org/abs/1904.03323)]
+
+**BioBERT: A pre-trained biomedical language representation model for biomedical text mining.** [2020].<br>
+*J. Lee, W. Yoon, S. Kim, D. Kim, S. Kim, C. H. So, J. Kang.*<br>
+Bioinformatics, vol. 36(4), pp. 1234–1240.<br>
+[[PDF](https://doi.org/10.1093/bioinformatics/btz682)]
 
 **Domain-Specific Language Model Pretraining for Biomedical Natural Language Processing.** [2022].<br>
 *Y. Gu, R. Tinn, H. Cheng, M. Lucas, N. Usuyama, X. Liu, T. Naumann, J. Gao, H. Poon.*<br>
@@ -712,13 +726,28 @@ arXiv:2403.18421.<br>
 
 # Radiology Report Generation
 
+**RadLex: A New Method for Indexing Online Educational Materials.** [2006].<br>
+*C. P. Langlotz.*<br>
+RadioGraphics, vol. 26(6), pp. 1595–1597.<br>
+[[PDF](https://doi.org/10.1148/rg.266065168)]
+
 **On the Automatic Generation of Medical Imaging Reports.** [2018] [ACL].<br>
 *B. Jing, P. Xie, E. Xing.*<br>
 [[PDF](https://doi.org/10.18653/v1/P18-1240)]
 
+**ESR Paper on Structured Reporting in Radiology.** [2018].<br>
+*European Society of Radiology (ESR).*<br>
+Insights into Imaging, vol. 9(1), pp. 1–7.<br>
+[[PDF](https://doi.org/10.1007/s13244-017-0588-8)]
+
 **Generating Radiology Reports via Memory-Driven Transformer.** [2020] [EMNLP].<br>
 *Z. Chen, Y. Song, T.-H. Chang, X. Wan.*<br>
 [[PDF](https://doi.org/10.18653/v1/2020.emnlp-main.112)]
+
+**Structured Reporting in Radiology: A Systematic Review to Explore its Potential.** [2022].<br>
+*J. M. Nobel, K. van Geel, S. G. F. Robben.*<br>
+European Radiology, vol. 32, pp. 2837–2854.<br>
+[[PDF](https://doi.org/10.1007/s00330-021-08327-5)]
 
 **R2GenGPT: Radiology Report Generation with Frozen LLMs.** [2023].<br>
 *Z. Wang et al.*<br>
@@ -744,24 +773,19 @@ Visual Computing for Industry, Biomedicine, and Art, vol. 6(1).<br>
 Radiology, vol. 307(4), pp. e230725.<br>
 [[PDF](https://doi.org/10.1148/radiol.230725)]
 
-**RadLex: A New Method for Indexing Online Educational Materials.** [2006].<br>
-*C. P. Langlotz.*<br>
-RadioGraphics, vol. 26(6), pp. 1595–1597.<br>
-[[PDF](https://doi.org/10.1148/rg.266065168)]
-
-**ESR Paper on Structured Reporting in Radiology.** [2018].<br>
-*European Society of Radiology (ESR).*<br>
-Insights into Imaging, vol. 9(1), pp. 1–7.<br>
-[[PDF](https://doi.org/10.1007/s13244-017-0588-8)]
-
-**Structured Reporting in Radiology: A Systematic Review to Explore its Potential.** [2022].<br>
-*J. M. Nobel, K. van Geel, S. G. F. Robben.*<br>
-European Radiology, vol. 32, pp. 2837–2854.<br>
-[[PDF](https://doi.org/10.1007/s00330-021-08327-5)]
-
 **RSNA Radiology Reporting Templates.** [2024].<br>
 *Radiological Society of North America (RSNA).*<br>
 [[Link](https://radreport.org/)]
+
+**CoMT: Chain-of-Medical-Thought Reduces Hallucination in Medical Report Generation.** [2024].<br>
+*Y. Jiang, J. Chen, D. Yang, M. Li, S. Wang, T. Wu, K. Li, L. Zhang.*<br>
+arXiv:2406.11451.<br>
+[[PDF](https://arxiv.org/abs/2406.11451)]
+
+**Direct Preference Optimization for Suppressing Hallucinated Prior Exams in Radiology Report Generation.** [2024].<br>
+*O. Banerjee, H.-Y. Zhou, S. Adithan, S. Kwak, K. Wu, P. Rajpurkar.*<br>
+arXiv:2406.06496.<br>
+[[PDF](https://arxiv.org/abs/2406.06496)]
 
 **The Application of Foundation Models in Radiology: Bridging Images, Reports, and Beyond.** [2025].<br>
 *D. Lee.*<br>
