@@ -1,1173 +1,284 @@
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/farhatmasood/ALSD_VLM_Review)
-[![PR's Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
-[![Awesome](https://cdn.rawgit.com/sindresorhus/awesome/d7305f38d29fed78fa85652e3a63e154dd8e8829/media/badge.svg)](https://github.com/sindresorhus/awesome)
-![Papers](https://img.shields.io/badge/Papers-213-blue)
-![Studies](https://img.shields.io/badge/Reviewed_Studies-165-orange)
+# Vision-language models for lumbar spine MRI: evidence, test design and measurement tolerance
 
-# <p align=center> "Vision-Language Foundation Models for Lumbar Spine Diagnostics: A Systematic Review of Architectures, Knowledge Distillation and Clinical Deployment Pathways" </p>
+Data and analysis code for the review article
 
-<!-- Authors: [Rao Farhat Masood](https://orcid.org/0000-0001-9054-9192) and [Imtiaz Ahmad Taj](https://orcid.org/0000-0003-1813-5563)
-
-Department of Electrical and Computer Engineering, Capital University of Science and Technology (CUST), Islamabad, Pakistan
+> **Vision-Language Foundation Models for Lumbar Spine Diagnostics: A Methodological Review of Architectures, Validation Evidence and Deployment Pathways.** Under review at the *European Journal of Radiology*.
 
-Corresponding author: farhatmasood.fm@gmail.com -->
-</p>
-
----
+The repository summarizes the review and holds the coding of the 51 artificial intelligence (AI) studies on spine data examined in it, the reported Dice similarity coefficients (DSC) shown in its forest plot, and the full list of cited references.
 
-## Summary
-
-Vision–language models (VLMs) and large language models (LLMs) are increasingly applied to medical image analysis, yet their adoption in spine diagnostics lacks systematic evaluation. This review synthesizes **165 peer-reviewed studies (2015–2026)**, presenting a unified mathematical framework for multimodal architectures spanning foundation models, knowledge distillation pipelines, volumetric processors and automated report generators. We formalize the design space through a common notation system for self-attention, contrastive pre-training and distillation losses and establish quantitative comparisons across six evaluation metrics (DSC, IoU, sensitivity, specificity, AUC, Cohen's κ). A random-effects meta-analysis of 14 spine segmentation studies yields a pooled vertebral Dice coefficient of **μ̂ = 0.897** (95% CI: 0.881–0.913; I² = 74.3%), with domain-specific models consistently surpassing general-purpose architectures. Peer-reviewed lumbar systems achieve **DSC of 0.93** on the VerSe benchmark, multi-label **IoU of 0.88** across 61 disorder combinations in 28,065 patients and stenosis detection **sensitivity of 0.93** at specificity 0.95 in blinded multi-reader studies. We introduce a spine-centric evaluation framework for more than 35 models across four architectural paradigms, present set-theoretic capability analysis and provide deployment recommendations stratified by computational constraints. Six critical research gaps are identified and a resource-stratified deployment roadmap is proposed to guide clinical translation.
+<p align="center"><img src="assets/graphical_abstract.png" width="760" alt="Graphical abstract"></p>
 
----
-
-## Highlights
-
-- **Comprehensive scope**: Systematic review of 165 peer-reviewed studies (2015–2026) on VLMs and LLMs for automated lumbar spine diagnostics.
-- **Spine-centric taxonomy**: Classification of 35+ medical LLMs and VLMs organized by architectural paradigm, multi-sequence MRI input capability and clinical deployment tier, with a role-centric matrix linking each model to specific lumbar pipeline functions.
-- **Unified mathematical framework**: Formalization of self-attention, CLIP contrastive pre-training, composite spine segmentation loss and knowledge distillation objectives, together with an empirically supported specialization–generalization ordering and an information-theoretic distillation bound.
-- **Meta-analytic synthesis**: Random-effects pooling of vertebral segmentation DSC across 14 spine studies (μ̂ = 0.897; 95% CI: 0.881–0.913; I² = 74.3%), with systematic heterogeneity analysis.
-- **3D-aware model assessment**: Computational overhead quantification and multi-sequence MRI capability mapping for volumetric spine models.
-- **Knowledge distillation analysis**: Task-stratified compression results with a unified teacher–student pipeline for clinical deployment across three resource tiers.
-- **Six research gaps identified**: Absence of standardized 3D spine benchmarks, insufficient prospective validation, distillation limitations for spatial representations, hallucination risks, demographic bias in training data, and the need for explainable AI.
-- **Evidence-based deployment roadmap**: Three-tier deployment recommendations (community → district → tertiary) with model-specific hardware requirements, expected DSC ranges and inference latency guidance.
-
----
-
-## Study Distribution
-
-| Research Category | MRI | CT | Total |
-|---|---|---|---|
-| Spine-specific diagnostic systems | 28 | 14 | 42 |
-| General medical VLMs | 18 | 6 | 24 |
-| Medical image segmentation | 22 | 15 | 37 |
-| Report generation & clinical NLP | 12 | 3 | 15 |
-| Knowledge distillation pipelines | 8 | 5 | 13 |
-| Foundation model adaptation | 11 | 4 | 15 |
-| Benchmark & dataset publications | 7 | 4 | 11 |
-| Text-only medical LLMs | — | — | 8 |
-| **Total** | | | **165** |
-
----
-
-<hr />
-
-# <p align=center>`VLMs & LLMs for Lumbar Spine Diagnostics`</p>
-
-A curated list of all **213 references** cited in the survey, organized by category (**in chronological order within each section**). We intend to regularly update this page with the latest relevant papers.
-
-We strongly encourage the researchers that want to promote their work to make pull requests to update their paper's information!
-
-## Overview
-- [Survey & Review Papers](#survey--review-papers)
-- [Foundational Architectures & Deep Learning](#foundational-architectures--deep-learning)
-- [General-Purpose Foundation Models](#general-purpose-foundation-models)
-- [Medical Vision-Language Models](#medical-vision-language-models)
-- [Medical Image Segmentation](#medical-image-segmentation)
-- [3D Medical Image Analysis](#3d-medical-image-analysis)
-- [Text-Based Medical Language Models](#text-based-medical-language-models)
-- [Radiology Report Generation](#radiology-report-generation)
-- [Knowledge Distillation & Parameter-Efficient Fine-Tuning](#knowledge-distillation--parameter-efficient-fine-tuning)
-- [Lumbar Spine Specialized Systems](#lumbar-spine-specialized-systems)
-- [Object Detection Architectures](#object-detection-architectures)
-- [Datasets & Benchmarks](#datasets--benchmarks)
-- [Clinical AI Deployment & Validation](#clinical-ai-deployment--validation)
-- [Statistical & Evaluation Methods](#statistical--evaluation-methods)
-
----
-
-# Survey & Review Papers
-
-**Deep Learning in Neural Networks: An Overview.** [2015].<br>
-*J. Schmidhuber.*<br>
-Neural Networks, vol. 61, pp. 85–117.<br>
-[[PDF](https://doi.org/10.1016/j.neunet.2014.09.003)]
-
-**A Survey on Deep Learning in Medical Image Analysis.** [2017].<br>
-*G. Litjens, T. Kooi, B. E. Bejnordi, A. A. A. Setio, F. Ciompi, M. Ghafoorian, J. A. W. M. van der Laak, B. van Ginneken, C. I. Sánchez.*<br>
-Medical Image Analysis, vol. 42, pp. 60–88.<br>
-[[PDF](https://doi.org/10.1016/j.media.2017.07.005)]
-
-**A Review: Deep Learning for Medical Image Segmentation Using Multi-Modality Fusion.** [2019].<br>
-*T. Zhou, S. Ruan, S. Canu.*<br>
-Array, vol. 3–4, pp. 100004.<br>
-[[PDF](https://doi.org/10.1016/j.array.2019.100004)]
-
-**Knowledge Distillation: A Survey.** [2021].<br>
-*J. Gou, B. Yu, S. J. Maybank, D. Tao.*<br>
-International Journal of Computer Vision, vol. 129(6), pp. 1789–1819.<br>
-[[PDF](https://doi.org/10.1007/s11263-021-01453-z)]
-
-**Knowledge Distillation In Medical Data Mining: A Survey.** [Oct. 2021].<br>
-*H. Meng, Z. Lin, F. Yang, Y. Xu, L. Cui.*<br>
-5th International Conference on Crowd Science and Engineering, pp. 175–182.<br>
-[[PDF](https://doi.org/10.1145/3503181.3503211)]
-
-**Transformers in Medical Imaging: A Survey.** [2023]. Medical Image Analysis.<br>
-*F. Shamshad, S. Khan, S. W. Zamir, M. H. Khan, M. Hayat, F. S. Khan, H. Fu.*<br>
-Medical Image Analysis, vol. 88, pp. 102802.<br>
-[[PDF](https://doi.org/10.1016/j.media.2023.102802)]
-
-**Computer-Vision Benchmark Segment-Anything Model (SAM) in Medical Images: Accuracy in 12 Datasets.** [2023].<br>
-*S. He, R. Bao, J. Li, J. Stout, A. Bjornerud, P. E. Grant, Y. Ou.*<br>
-arXiv:2304.09324.<br>
-[[PDF](https://arxiv.org/abs/2304.09324)]
-
-**Segment Anything Model for Medical Image Analysis: An Experimental Study.** [2023].<br>
-*M. A. Mazurowski, H. Dong, H. Gu, J. Yang, N. Konz, Y. Zhang.*<br>
-Medical Image Analysis, vol. 89, pp. 102918.<br>
-[[PDF](https://doi.org/10.1016/j.media.2023.102918)]
-
-**Survey of Hallucination in Natural Language Generation.** [2023].<br>
-*Z. Ji, N. Lee, R. Frieske, T. Yu, D. Su, Y. Xu, E. Ishii, Y. J. Bang, A. Madotto, P. Fung.*<br>
-ACM Computing Surveys, vol. 55(12), pp. 1–38.<br>
-[[PDF](https://doi.org/10.1145/3571730)]
-
-**A Survey of Large Language Models for Healthcare: From Data, Technology, and Applications to Accountability and Ethics.** [2023].<br>
-*K. He et al.*<br>
-arXiv:2310.05694.<br>
-[[PDF](https://arxiv.org/abs/2310.05694)]
-
-**A survey of large language models in medicine.** [2023].<br>
-*W. Liao et al.*<br>
-arXiv:2311.05112.<br>
-[[PDF](https://arxiv.org/abs/2311.05112)]
-
-**Generalist Vision Foundation Models for Medical Imaging: A Case Study of Segment Anything Model on Zero-Shot Medical Segmentation.** [2023].<br>
-*P. Shi, J. Qiu, S. M. D. Aodeng, H. Wei, F. P.-W. Lo, W. Yuan.*<br>
-Diagnostics, vol. 13(11), pp. 1947.<br>
-[[PDF](https://doi.org/10.3390/diagnostics13111947)]
-
-**A survey on medical large language models: Technology, application, trustworthiness, and future directions.** [2024].<br>
-*L. Liu, X. Yang, J. Lei, Y. Shen, J. Wang, P. Wei, Z. Chu, Z. Qin, K. Ren.*<br>
-arXiv:2406.03712.<br>
-[[PDF](https://arxiv.org/abs/2406.03712)]
-
-**A Survey on Model Compression for Large Language Models.** [2024].<br>
-*X. Zhu, J. Li, Y. Liu, C. Ma, W. Wang.*<br>
-arXiv:2308.07633.<br>
-[[PDF](https://arxiv.org/abs/2308.07633)]
-
-**A Survey on Knowledge Distillation of Large Language Models.** [2024].<br>
-*Z. Xu et al.*<br>
-arXiv:2402.13116.<br>
-[[PDF](https://arxiv.org/abs/2402.13116)]
-
-**Advances in medical image segmentation: A comprehensive survey with a focus on lumbar spine applications.** [2024].<br>
-*R. Azad et al.*<br>
-arXiv:2510.03318.<br>
-[[PDF](https://arxiv.org/abs/2510.03318)]
-
-**Deep Learning Assisted Segmentation of the Lumbar Intervertebral Disc: A Systematic Review and Meta-Analysis.** [2024].<br>
-*A. Wang et al.*<br>
-Journal of Orthopaedic Surgery and Research, vol. 19(1), pp. 496.<br>
-[[PDF](https://doi.org/10.1186/s13018-024-05002-5)]
-
-**Advances in medical image segmentation: A comprehensive survey with a focus on lumbar spine applications.** [2025].<br>
-*A. Kabil, G. Khoriba, M. Yousef, E. A. Rashed.*<br>
-Computers in Biology and Medicine, vol. 198, pp. 111171.<br>
-[[PDF](https://doi.org/10.1016/j.compbiomed.2025.111171)]
-
-**Vision-Language Models in Medical Image Analysis: From Simple Fusion to General Large Models.** [2025].<br>
-*X. Li et al.*<br>
-Information Fusion, vol. 118, pp. 102995.<br>
-[[PDF](https://doi.org/10.1016/j.inffus.2025.102995)]
-
-**Towards Comprehensive Benchmarking of Medical Vision Language Models.** [2025].<br>
-*D. Khatri, S. T. P. Gupta.*<br>
-Briefings in Bioinformatics, vol. 26(Suppl 1), pp. i24–i25.<br>
-[[PDF](https://doi.org/10.1093/bib/bbaf631.035)]
-
-**Can We Trust AI Doctors? A Survey of Medical Hallucination in Large Language and Large Vision-Language Models.** [2025].<br>
-*Z. Zhu, Y. Zhang, X. Zhuang, F. Zhang, Z. Wan, Y. Chen, Q. Long, Y. Zheng, X. Wu.*<br>
-Findings of the Association for Computational Linguistics: ACL 2025, pp. 6748–6769.<br>
-[[PDF](https://doi.org/10.18653/v1/2025.findings-acl.350)]
-
-**Medical Large Language Models and Systems in the Clinical Application of Spinal Diseases: Current Status, Challenges, and Future Prospects.** [2026].<br>
-*W. Tang, R. Chen, X. Long, D. Yu, S. Zhao, B. Chen.*<br>
-Journal of Orthopaedic Translation, vol. 57, pp. 101050.<br>
-[[PDF](https://doi.org/10.1016/j.jot.2026.101050)]
-
-**A systematic review of vision language models: Comprehensive analysis of architectures, applications, datasets and challenges towards robust multimodal intelligence.** [2026].<br>
-*A. Rahman.*<br>
-Array, pp. 100739.<br>
-[[PDF](https://doi.org/10.1016/j.array.2026.100739)]
-
-**Clinical AI in Radiology: Foundations, Trends, Applications, and Emerging Directions.** [2026].<br>
-*I. Hartsock, N. Koutsoubis, S. Ahmed, N. Parker, M. B. Schabath, C. Araujo, A. Qayyum, C. Lam, R. A. Gatenby, G. Rasool.*<br>
-Cancers, vol. 18(6), pp. 942.<br>
-[[PDF](https://doi.org/10.3390/cancers18060942)]
-
----
-
-# Foundational Architectures & Deep Learning
-
-**Deep Learning.** [2015].<br>
-*Y. LeCun, Y. Bengio, G. Hinton.*<br>
-Nature, vol. 521(7553), pp. 436–444.<br>
-[[PDF](https://doi.org/10.1038/nature14539)]
-
-**Fully Convolutional Networks for Semantic Segmentation.** [2015] [CVPR].<br>
-*J. Long, E. Shelhamer, T. Darrell.*<br>
-[[PDF](https://doi.org/10.1109/CVPR.2015.7298965)]
-
-**Deep Residual Learning for Image Recognition.** [2016] [CVPR].<br>
-*K. He, X. Zhang, S. Ren, J. Sun.*<br>
-[[PDF](https://doi.org/10.1109/CVPR.2016.90)]
-
-**Attention is All You Need.** [2017] [NeurIPS].<br>
-*A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, Ł. Kaiser, I. Polosukhin.*<br>
-Advances in Neural Information Processing Systems, vol. 30, pp. 5998–6008.<br>
-[[PDF](https://proceedings.neurips.cc/paper/2017/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html)]
-
-**Densely Connected Convolutional Networks.** [2017] [CVPR].<br>
-*G. Huang, Z. Liu, L. van der Maaten, K. Q. Weinberger.*<br>
-[[PDF](https://doi.org/10.1109/CVPR.2017.243)]
-
-**Dermatologist-level classification of skin cancer with deep neural networks.** [2017].<br>
-*A. Esteva, B. Kuprel, R. A. Novoa, J. Ko, S. M. Swetter, H. M. Blau, S. Thrun.*<br>
-Nature, vol. 542(7639), pp. 115–118.<br>
-[[PDF](https://doi.org/10.1038/nature21056)]
-
-**BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding.** [2019] [NAACL-HLT].<br>
-*J. Devlin, M.-W. Chang, K. Lee, K. Toutanova.*<br>
-[[PDF](https://doi.org/10.18653/v1/N19-1423)]
-
-**EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks.** [2019] [ICML].<br>
-*M. Tan, Q. V. Le.*<br>
-[[PDF](https://arxiv.org/abs/1905.11946)]
-
-**Language Models are Unsupervised Multitask Learners.** [2019].<br>
-*A. Radford, J. Wu, R. Child, D. Luan, D. Amodei, I. Sutskever.*<br>
-OpenAI Blog.<br>
-[[PDF](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf)]
-
-**Language Models are Few-Shot Learners.** [2020] [NeurIPS].<br>
-*T. Brown, B. Mann, N. Ryder, M. Subbiah, J. D. Kaplan, P. Dhariwal, A. Neelakantan et al.*<br>
-Advances in Neural Information Processing Systems, vol. 33, pp. 1877–1901.<br>
-[[PDF](https://proceedings.neurips.cc/paper/2020/hash/1457c0d6bfcb4967418bfb8ac142f64a-Abstract.html)]
-
-**Generative Adversarial Networks.** [2020].<br>
-*I. Goodfellow, J. Pouget-Abadie, M. Mirza, B. Xu, D. Warde-Farley, S. Ozair, A. Courville, Y. Bengio.*<br>
-Communications of the ACM, vol. 63(11), pp. 139–144.<br>
-[[PDF](https://doi.org/10.1145/3422622)]
-
-**Transformers: State-of-the-Art Natural Language Processing.** [2020] [EMNLP Demos].<br>
-*T. Wolf et al.*<br>
-[[PDF](https://doi.org/10.18653/v1/2020.emnlp-demos.6)]
-
-**An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale.** [2021] [ICLR].<br>
-*A. Dosovitskiy, L. Beyer, A. Kolesnikov, D. Weissenborn, X. Zhai, T. Unterthiner, M. Dehghani, M. Minderer, G. Heigold, S. Gelly, J. Uszkoreit, N. Houlsby.*<br>
-[[PDF](https://arxiv.org/abs/2010.11929)]
-
-**Learning Transferable Visual Models From Natural Language Supervision.** [2021] [ICML].<br>
-*A. Radford, J. W. Kim, C. Hallacy, A. Ramesh, G. Goh, S. Agarwal, G. Sastry, A. Askell, P. Mishkin, J. Clark, G. Krueger, I. Sutskever.*<br>
-[[PDF](https://arxiv.org/abs/2103.00020)]
-
-**Swin Transformer: Hierarchical Vision Transformer Using Shifted Windows.** [2021] [ICCV].<br>
-*Z. Liu, Y. Lin, Y. Cao, H. Hu, Y. Wei, Z. Zhang, S. Lin, B. Guo.*<br>
-[[PDF](https://doi.org/10.1109/ICCV48922.2021.00986)]
-
-**DINOv2: Learning Robust Visual Features without Supervision.** [2023].<br>
-*M. Oquab, T. Darcet, T. Moutakanni, H. V. Vo, M. Szafraniec, V. Khalidov, P. Fernandez et al.*<br>
-Transactions on Machine Learning Research (TMLR), 2024.<br>
-[[PDF](https://arxiv.org/abs/2304.07193)]
-
-**SigLIP: Sigmoid loss for language image pre-training.** [2023] [ICCV].<br>
-*X. Zhai, B. Mustafa, A. Kolesnikov, L. Beyer.*<br>
-[[PDF](https://doi.org/10.48550/arXiv.2303.15343)]
-
----
-
-# General-Purpose Foundation Models
-
-**Segment Anything.** [2023] [ICCV].<br>
-*A. Kirillov, E. Mintun, N. Ravi, H. Mao, C. Rolland, L. Gustafson, T. Xiao, S. Whitehead, A. C. Berg, W.-Y. Lo, P. Dollár, R. Girshick.*<br>
-[[PDF](https://doi.org/10.1109/ICCV51070.2023.00371)]
-
-**LLaMA: Open and Efficient Foundation Language Models.** [2023].<br>
-*H. Touvron, T. Lavril, G. Izacard, X. Martinet, M.-A. Lachaux, T. Lacroix, B. Rozière et al.*<br>
-arXiv:2302.13971.<br>
-[[PDF](https://arxiv.org/abs/2302.13971)]
-
-**LLaMA 2: Open Foundation and Fine-Tuned Chat Models.** [2023].<br>
-*H. Touvron, L. Martin, K. Stone, P. Albert, A. Almahairi, Y. Babaei et al.*<br>
-arXiv:2307.09288.<br>
-[[PDF](https://arxiv.org/abs/2307.09288)]
-
-**Visual Instruction Tuning.** [2023] [NeurIPS].<br>
-*H. Liu, C. Li, Q. Wu, Y. J. Lee.*<br>
-[[PDF](https://arxiv.org/abs/2304.08485)]
-
-**PaLM: Scaling Language Modeling with Pathways.** [2023].<br>
-*A. Chowdhery, S. Narang, J. Devlin, M. Bosma, G. Mishra, A. Roberts et al.*<br>
-Journal of Machine Learning Research, vol. 24(240), pp. 1–113.<br>
-[[PDF](https://arxiv.org/abs/2204.02311)]
-
-**Gemini: A Family of Highly Capable Multimodal Models.** [2023].<br>
-*Gemini Team, R. Anil, S. Borgeaud, Y. Wu, J.-B. Alayrac, J. Yu et al.*<br>
-arXiv:2312.11805.<br>
-[[PDF](https://arxiv.org/abs/2312.11805)]
-
-**BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image Encoders and Large Language Models.** [2023] [ICML].<br>
-*J. Li, D. Li, S. Savarese, S. Hoi.*<br>
-[[PDF](https://arxiv.org/abs/2301.12597)]
-
-**InstructBLIP: Towards General-purpose Vision-Language Models with Instruction Tuning.** [2023] [NeurIPS].<br>
-*W. Dai, J. Li, D. Li, A. M. H. Tiong, J. Zhao, W. Wang, B. Li, P. Fung, S. Hoi.*<br>
-[[PDF](https://arxiv.org/abs/2305.06500)]
-
-**Gemma: Open Models Based on Gemini Research and Technology.** [2024].<br>
-*Gemma Team, T. Mesnard, C. Hardin, R. Dadashi, S. Bhupatiraju et al.*<br>
-arXiv:2403.08295.<br>
-[[PDF](https://arxiv.org/abs/2403.08295)]
-
-**MiniGPT-4: Enhancing Vision-Language Understanding with Advanced Large Language Models.** [2024] [ICLR].<br>
-*D. Zhu, J. Chen, X. Shen, X. Li, M. Elhoseiny.*<br>
-[[PDF](https://arxiv.org/abs/2304.10592)]
-
-**Improved Baselines with Visual Instruction Tuning.** [2024] [CVPR].<br>
-*H. Liu, C. Li, Y. Li, Y. J. Lee.*<br>
-[[PDF](https://arxiv.org/abs/2310.03744)]
-
-**InternVL: Scaling up Vision Foundation Models and Aligning for Generic Visual-Linguistic Tasks.** [2024] [CVPR].<br>
-*Z. Chen, J. Wu, W. Wang et al.*<br>
-[[PDF](https://doi.org/10.1109/CVPR52733.2024.02283)]
-
-**Gemini 1.5: Unlocking Multimodal Understanding Across Millions of Tokens of Context.** [2024].<br>
-*Gemini Team, M. Reid, N. Savinov, D. Teplyashin et al.*<br>
-arXiv:2403.05530.<br>
-[[PDF](https://arxiv.org/abs/2403.05530)]
-
-**SAM 2: Segment Anything in Images and Videos.** [2024].<br>
-*N. Ravi, V. Gabeur, Y.-T. Hu, R. Hu, C. Ryali, T. Ma, H. Khedr et al.*<br>
-arXiv:2408.00714.<br>
-[[PDF](https://arxiv.org/abs/2408.00714)]
-
-**Gemma 3 Technical Report.** [2025].<br>
-*Gemma Team.*<br>
-arXiv:2503.19786.<br>
-[[PDF](https://arxiv.org/abs/2503.19786)]
-
-**Gemma 4 Model Card.** [2026].<br>
-*Gemma Team, Google DeepMind.*<br>
-Released 31 March 2026. Apache 2.0 licence.<br>
-[[Link](https://ai.google.dev/gemma/docs/core/model_card_4)]
-
----
-
-# Medical Vision-Language Models
-
-**MedCLIP: Contrastive Learning from Unpaired Medical Images and Text.** [2022] [EMNLP].<br>
-*Z. Wang, Z. Wu, D. Agarwal, J. Sun.*<br>
-[[PDF](https://doi.org/10.18653/v1/2022.emnlp-main.256)]
-
-**Foundation models for generalist medical artificial intelligence.** [2023].<br>
-*M. Moor, O. Banerjee, Z. S. H. Abad, H. M. Krumholz, J. Leskovec, E. J. Topol, P. Rajpurkar.*<br>
-Nature, vol. 616(7956), pp. 259–265.<br>
-[[PDF](https://doi.org/10.1038/s41586-023-05881-4)]
-
-**Large language models encode clinical knowledge.** [2023].<br>
-*K. Singhal, S. Azizi, T. Tu, S. S. Mahdavi, J. Wei, H. W. Chung et al.*<br>
-Nature, vol. 620(7972), pp. 172–180.<br>
-[[PDF](https://doi.org/10.1038/s41586-023-06291-2)]
-
-**Large language models in medicine.** [2023].<br>
-*A. J. Thirunavukarasu, D. S. J. Ting, K. Elangovan, L. Gutierrez, T. F. Tan, D. S. W. Ting.*<br>
-Nature Medicine, vol. 29(8), pp. 1930–1940.<br>
-[[PDF](https://doi.org/10.1038/s41591-023-02448-8)]
-
-**Capabilities of GPT-4 on Medical Challenge Problems.** [2023].<br>
-*H. Nori, N. King, S. M. McKinney, D. Carignan, E. Horvitz.*<br>
-arXiv:2303.13375.<br>
-[[PDF](https://arxiv.org/abs/2303.13375)]
-
-**GPT-4 Technical Report.** [2023].<br>
-*OpenAI.*<br>
-arXiv:2303.08774.<br>
-[[PDF](https://arxiv.org/abs/2303.08774)]
-
-**LLaVA-Med: Training a Large Language-and-Vision Assistant for Biomedicine in One Day.** [2023] [NeurIPS].<br>
-*C. Li, C. Wong, S. Zhang, N. Usuyama, H. Liu, J. Yang, T. Naumann, H. Poon, J. Gao.*<br>
-[[PDF](https://arxiv.org/abs/2306.00890)]
-
-**Med-Flamingo: A Multimodal Medical Few-Shot Learner.** [2023] [ML4H, NeurIPS Workshop].<br>
-*M. Moor, Q. Huang, S. Wu, M. Yasunaga, C. Zakka, Y. Dalmia, E. P. Reis, P. Rajpurkar, J. Leskovec.*<br>
-[[PDF](https://arxiv.org/abs/2307.15189)]
-
-**BiomedCLIP: A Multimodal Biomedical Foundation Model Pretrained from Fifteen Million Scientific Image-Text Pairs.** [2023] [NeurIPS Datasets and Benchmarks Track].<br>
-*S. Zhang, Y. Xu, N. Usuyama, H. Xu, J. Bagga, R. Tinn, S. Preston, R. Rao, M. Wei, N. Valluri, C. Wong, T. Naumann, H. Poon.*<br>
-[[PDF](https://arxiv.org/abs/2303.00915)]
-
-**PMC-LLaMA: Towards Building Open-source Language Models for Medicine.** [2023].<br>
-*C. Wu, W. Lin, X. Zhang, Y. Zhang, Y. Wang, W. Xie.*<br>
-arXiv:2304.14454.<br>
-[[PDF](https://arxiv.org/abs/2304.14454)]
-
-**Towards Generalist Foundation Model for Radiology by Leveraging Web-Scale 2D & 3D Medical Data.** [2023].<br>
-*C. Wu, X. Zhang, Y. Zhang, Y. Wang, W. Xie.*<br>
-arXiv:2308.02463.<br>
-[[PDF](https://arxiv.org/abs/2308.02463)]
-
-**XrayGPT: Chest Radiographs Summarization using Medical Vision-Language Models.** [2023].<br>
-*O. Thawkar, A. Shaker, S. P. Mullappilly, H. Cholakkal, R. M. Anwer, S. Khan, J. Laaksonen, F. S. Khan.*<br>
-arXiv:2306.07971.<br>
-[[PDF](https://arxiv.org/abs/2306.07971)]
-
-**MAIRA-1: A Specialised Large Multimodal Model for Radiology Report Generation.** [2023].<br>
-*S. L. Hyland, S. Bannur et al.*<br>
-arXiv:2311.13668.<br>
-[[PDF](https://arxiv.org/abs/2311.13668)]
-
-**Visual Med-Alpaca: A Parameter-Efficient Biomedical LLM with Visual Capabilities.** [2023].<br>
-*C. Shu, B. Chen, F. Liu, Z. Fu, E. Shareghi, N. Collier.*<br>
-Language Technology Lab, University of Cambridge.<br>
-[[Github](https://github.com/cambridgeltl/visual-med-alpaca)]
-
-**Learning to Exploit Temporal Structure for Biomedical Vision-Language Processing.** [2023] [CVPR].<br>
-*S. Bannur, S. Hyland, Q. Liu, F. Perez-Garcia, M. Ilse, D. C. Castro et al.*<br>
-[[PDF](https://doi.org/10.1109/CVPR52729.2023.01442)]
-
-**DoctorGLM: Fine-Tuning your Chinese Doctor is not a Herculean Task.** [2023].<br>
-*H. Xiong, S. Wang, Y. Zhu, Z. Zhao, Y. Liu, Q. Wang, D. Shen.*<br>
-arXiv:2304.01097.<br>
-[[PDF](https://arxiv.org/abs/2304.01097)]
-
-**Towards Generalist Biomedical AI.** [2024].<br>
-*T. Tu, S. Azizi, D. Driess, M. Schaekermann, M. Amin, P.-H. Chang et al.*<br>
-NEJM AI, vol. 1(3).<br>
-[[PDF](https://doi.org/10.1056/AIoa2300138)]
-
-**CheXagent: Towards a Foundation Model for Chest X-Ray Interpretation.** [2024].<br>
-*Z. Chen, J. M. Varma, D. Wan, R. G. Barber et al.*<br>
-arXiv:2401.12208.<br>
-[[PDF](https://arxiv.org/abs/2401.12208)]
-
-**MAIRA-2: Grounded Radiology Report Generation.** [2024].<br>
-*S. Bannur, S. Hyland, Q. Liu, F. Pérez-García et al.*<br>
-arXiv:2406.04449.<br>
-[[PDF](https://arxiv.org/abs/2406.04449)]
-
-**STLLaVA-Med: Self-training large language and vision assistant for medical question-answering.** [2024].<br>
-*G. Sun et al.*<br>
-arXiv:2406.19973.<br>
-[[PDF](https://arxiv.org/abs/2406.19973)]
-
-**Mitigating Hallucination in Large Multi-Modal Models via Robust Instruction Tuning.** [2024] [ICLR].<br>
-*F. Liu et al.*<br>
-[[PDF](https://arxiv.org/abs/2306.14565)]
-
-**PMC-VQA: Visual Instruction Tuning for Medical Visual Question Answering.** [2024].<br>
-*X. Zhang et al.*<br>
-arXiv:2305.10415.<br>
-[[PDF](https://arxiv.org/abs/2305.10415)]
-
-**Towards building multilingual language model for medicine.** [2024].<br>
-*P. Qiu, C. Wu, X. Zhang, W. Lin, H. Wang, Y. Zhang, Y. Wang, W. Xie.*<br>
-Nature Communications, vol. 15(1), pp. 8384.<br>
-[[PDF](https://doi.org/10.1038/s41467-024-52417-z)]
-
-**Capabilities of Gemini Models in Medicine.** [2024].<br>
-*K. Saab, T. Tu, W.-H. Weng, R. Tanno, D. Stutz et al.*<br>
-arXiv:2404.18416.<br>
-[[PDF](https://arxiv.org/abs/2404.18416)]
-
-**RULE: Reliable Multimodal RAG for Factuality in Medical Vision Language Models.** [2024].<br>
-*P. Xia, K. Zhu, H. Li, H. Zhu, Y. Li, G. Li, L. Zhang, H. Yao.*<br>
-arXiv:2407.05131.<br>
-[[PDF](https://arxiv.org/abs/2407.05131)]
-
-**MedCoT: Medical Chain of Thought via Hierarchical Expert.** [2024] [EMNLP].<br>
-*J. Liu, Y. Wang, J. Du, J. T. Zhou, Z. Liu.*<br>
-[[PDF](https://aclanthology.org/2024.emnlp-main.962/)]
-
-**MedGemma Technical Report.** [2025].<br>
-*A. Sellergren et al.*<br>
-arXiv:2507.05201.<br>
-[[PDF](https://arxiv.org/abs/2507.05201)]
-
-**A generalist medical language model for disease diagnosis assistance.** [2025].<br>
-*X. Liu, H. Liu, G. Yang, Z. Jiang, S. Cui, Z. Zhang, H. Wang et al.*<br>
-Nature Medicine, vol. 31(3), pp. 932–942.<br>
-[[PDF](https://doi.org/10.1038/s41591-024-03416-6)]
-
-**MedVisionLlama: Leveraging Pre-Trained Large Language Model Layers to Enhance Medical Image Segmentation.** [2025].<br>
-*G. Marthi Krishna Kumar, A. Chadha, J. Mendola, A. Shmuel.*<br>
-arXiv:2410.02458. Accepted at CVAMD Workshop, ICCVW 2025.<br>
-[[PDF](https://arxiv.org/abs/2410.02458)]
-
-**LLaVA-NeXT-Med: Medical Multimodal Large Language Model.** [2025] [CITSC].<br>
-*Y. Guo, W. Huang.*<br>
-[[PDF](https://doi.org/10.1109/CITSC64390.2025.00092)]
-
-**Toward Expert-Level Medical Question Answering with Large Language Models.** [2025].<br>
-*K. Singhal, T. Tu, J. Gottweis et al.*<br>
-Nature Medicine, vol. 31, pp. 943–950.<br>
-[[PDF](https://doi.org/10.1038/s41591-024-03423-7)]
-
-**MedGemma 1.5 Technical Report.** [2026].<br>
-*A. Sellergren, C. Gao, F. Mahvar, T. Kohlberger, F. Jamil et al.*<br>
-arXiv:2604.05081.<br>
-[[PDF](https://arxiv.org/abs/2604.05081)]
-
----
-
-# Medical Image Segmentation
-
-**U-Net: Convolutional Networks for Biomedical Image Segmentation.** [2015] [MICCAI].<br>
-*O. Ronneberger, P. Fischer, T. Brox.*<br>
-LNCS vol. 9351, pp. 234–241.<br>
-[[PDF](https://doi.org/10.1007/978-3-319-24574-4_28)]
-
-**V-Net: Fully Convolutional Neural Networks for Volumetric Medical Image Segmentation.** [2016] [3DV].<br>
-*F. Milletari, N. Navab, S.-A. Ahmadi.*<br>
-[[PDF](https://doi.org/10.1109/3DV.2016.79)]
-
-**3D U-Net: Learning Dense Volumetric Segmentation from Sparse Annotation.** [2016] [MICCAI].<br>
-*Ö. Çiçek, A. Abdulkadir, S. S. Lienkamp, T. Brox, O. Ronneberger.*<br>
-LNCS vol. 9901, pp. 424–432.<br>
-[[PDF](https://doi.org/10.1007/978-3-319-46723-8_49)]
-
-**Generalised Dice Overlap as a Deep Learning Loss Function for Highly Unbalanced Segmentations.** [2017].<br>
-*C. H. Sudre, W. Li, T. Vercauteren, S. Ourselin, M. J. Cardoso.*<br>
-LNCS vol. 10553, pp. 240–248.<br>
-[[PDF](https://doi.org/10.1007/978-3-319-67558-9_28)]
-
-**3D MRI Brain Tumor Segmentation Using Autoencoder Regularization.** [2019] [MICCAI BrainLes Workshop].<br>
-*A. Myronenko.*<br>
-LNCS vol. 11384, pp. 311–320.<br>
-[[PDF](https://doi.org/10.1007/978-3-030-11726-9_28)]
-
-**UNet++: Redesigning Skip Connections to Exploit Multiscale Features in Image Segmentation.** [2020].<br>
-*Z. Zhou, M. M. R. Siddiquee, N. Tajbakhsh, J. Liang.*<br>
-IEEE Transactions on Medical Imaging, vol. 39(6), pp. 1856–1867.<br>
-[[PDF](https://doi.org/10.1109/TMI.2019.2959609)]
-
-**nnU-Net: A Self-Configuring Method for Deep Learning-Based Biomedical Image Segmentation.** [2021].<br>
-*F. Isensee, P. F. Jaeger, S. A. A. Kohl, J. Petersen, K. H. Maier-Hein.*<br>
-Nature Methods, vol. 18(2), pp. 203–211.<br>
-[[PDF](https://doi.org/10.1038/s41592-020-01008-z)]
-
-**TransUNet: Rethinking the U-Net Architecture Design for Medical Image Segmentation through the Lens of Transformers.** [2024].<br>
-*J. Chen, Y. Lu, Q. Yu, X. Luo, E. Adeli, Y. Wang, L. Lu, A. L. Yuille, Y. Zhou.*<br>
-Medical Image Analysis, vol. 97, pp. 103280.<br>
-[[PDF](https://doi.org/10.1016/j.media.2024.103280)]
-
-**Efficient Medical Image Segmentation Based on Knowledge Distillation.** [2021].<br>
-*D. Qin, J.-J. Bu, Z. Liu, X. Shen, S. Zhou, J.-J. Gu, Z.-H. Wang, L. Wu, H.-F. Dai.*<br>
-IEEE Transactions on Medical Imaging, vol. 40(12), pp. 3820–3831.<br>
-[[PDF](https://doi.org/10.1109/TMI.2021.3098703)]
-
-**MONAI: An open-source framework for deep learning in healthcare.** [2022].<br>
-*M. J. Cardoso, W. Li, R. Brown, N. Ma, E. Kerfoot et al.*<br>
-arXiv:2211.02701.<br>
-[[PDF](https://arxiv.org/abs/2211.02701)]
-
-**Self-Supervised Pre-Training of Swin Transformers for 3D Medical Image Analysis.** [2022] [CVPR].<br>
-*Y. Tang, D. Yang, W. Li, H. R. Roth, B. Landman, D. Xu, V. Nath, A. Hatamizadeh.*<br>
-[[PDF](https://doi.org/10.1109/CVPR52688.2022.02007)]
-
-**Swin UNETR: Swin Transformers for Semantic Segmentation of Brain Tumors in MRI Images.** [2022] [MICCAI BrainLes Workshop].<br>
-*A. Hatamizadeh, V. Nath, Y. Tang, D. Yang, H. R. Roth, D. Xu.*<br>
-LNCS vol. 12962, pp. 272–284.<br>
-[[PDF](https://doi.org/10.1007/978-3-031-08999-2_22)]
-
-**CLIP-Driven Universal Model for Organ Segmentation and Tumor Detection.** [2023] [ICCV].<br>
-*J. Liu et al.*<br>
-[[PDF](https://doi.org/10.1109/ICCV51070.2023.01934)]
-
-**UniverSeg: Universal Medical Image Segmentation.** [2023] [ICCV].<br>
-*V. I. Butoi, J. J. Ortiz, T. Ma, M. R. Sabuncu, J. Guttag, A. V. Dalca.*<br>
-[[PDF](https://arxiv.org/abs/2304.06131)]
-
-**Segment anything in medical images.** [2024].<br>
-*J. Ma, Y. He, F. Li, L. Han, C. You, B. Wang.*<br>
-Nature Communications, vol. 15(1), pp. 654.<br>
-[[PDF](https://doi.org/10.1038/s41467-024-44824-z)]
-
-**SAM-Med3D: Towards General-Purpose Segmentation Models for Volumetric Medical Images.** [2024].<br>
-*H. Wang, S. Guo, J. Ye, Z. Deng, J. Cheng, T. Li et al.*<br>
-arXiv:2310.15161.<br>
-[[PDF](https://arxiv.org/abs/2310.15161)]
-
-**SAM-Med2D: Segment Anything in Medical 2D Images.** [2024].<br>
-*J. Cheng, J. Ye, Z. Deng, J. Chen, T. Li, H. Wang et al.*<br>
-arXiv:2308.16184.<br>
-[[PDF](https://arxiv.org/abs/2308.16184)]
-
-**MedCLIP-SAM: Bridging Text and Image Towards Universal Medical Image Segmentation.** [2024] [MICCAI].<br>
-*T. Koleilat, H. Asgariandehkordi, H. Rivaz, Y. Xiao.*<br>
-[[PDF](https://arxiv.org/abs/2403.20253)]
-
-**MA-SAM: Modality-Agnostic SAM Adaptation for 3D Medical Image Segmentation.** [2024].<br>
-*J. Chen et al.*<br>
-Medical Image Analysis, vol. 98, pp. 103310.<br>
-[[PDF](https://doi.org/10.1016/j.media.2024.103310)]
-
-**SA-Med2D-20M: Segment Anything in Medical 2D Images with 20 Million Masks.** [2024].<br>
-*J. Ye et al.*<br>
-arXiv:2311.11969.<br>
-[[PDF](https://arxiv.org/abs/2311.11969)]
-
-**MedSAM-2: Segment Medical Images As Video Via Segment Anything Model 2.** [2025].<br>
-*J. Zhu, A. Hamdi, Y. Qi, Y. Jin, J. Wu.*<br>
-arXiv:2408.00874. Accepted at MICCAI 2025.<br>
-[[PDF](https://arxiv.org/abs/2408.00874)]
-
-**SAM2-Rad: A segmentation model for medical images with learnable prompts.** [2025].<br>
-*A. S. Wahd, B. Felfeliyan, Y. Zhou, S. Ghosh, A. McArthur, J. Zhang, J. L. Jaremko, A. Hareendranathan.*<br>
-Computers in Biology and Medicine, vol. 187, pp. 109725.<br>
-[[PDF](https://doi.org/10.1016/j.compbiomed.2025.109725)]
-
-**Self-prompt SAM: Medical image segmentation via automatic prompt SAM adaptation.** [2025].<br>
-*B. Xie, H. Tang, D. Cai, Y. Yan, G. Agam.*<br>
-arXiv:2502.00630.<br>
-[[PDF](https://arxiv.org/abs/2502.00630)]
-
-**MedSeg-R: Reasoning segmentation in medical images with multimodal large language models.** [2025].<br>
-*Y. Huang, Z. Peng, Y. Zhao, P. Yang, X. Yang, W. Shen.*<br>
-arXiv:2506.10465.<br>
-[[PDF](https://arxiv.org/abs/2506.10465)]
-
-**SAM-Med3D: A vision foundation model for general-purpose segmentation on volumetric medical images.** [2025].<br>
-*H. Wang, S. Guo, J. Ye, Z. Deng, J. Cheng, T. Li et al.*<br>
-IEEE Transactions on Neural Networks and Learning Systems.<br>
-[[PDF](https://doi.org/10.1109/tnnls.2025.3586694)]
-
-**Automated Lumbar Spine Segmentation in MRI Using an Enhanced U-Net with Inception Module and Dual-Output Mechanism.** [2025].<br>
-*J. T. Silveira, G. S., P. P. Kundapur.*<br>
-Scientific Reports, vol. 15(1), pp. 39215.<br>
-[[PDF](https://doi.org/10.1038/s41598-025-20721-3)]
-
-**Medical SAM3: A Foundation Model for Universal Prompt-Driven Medical Image Segmentation.** [2026].<br>
-*C. Jiang, T. Ding, C. Song, J. Tu, Z. Yan, Y. Shao et al.*<br>
-arXiv:2601.10880.<br>
-[[PDF](https://arxiv.org/abs/2601.10880)]
-
----
-
-# 3D Medical Image Analysis
-
-**Developing generalist foundation models from a multimodal dataset for 3D computed tomography.** [2024].<br>
-*I. E. Hamamci, S. Er, C. Wang, F. Almas, A. G. Simsek et al.*<br>
-arXiv:2403.17834.<br>
-[[PDF](https://arxiv.org/abs/2403.17834)]
-
-**CT2Rep: Automated Radiology Report Generation for 3D Medical Imaging.** [2024].<br>
-*I. E. Hamamci, S. Er, E. Alkan et al.*<br>
-arXiv:2403.06801.<br>
-[[PDF](https://arxiv.org/abs/2403.06801)]
-
-**M3D: Advancing 3D Medical Image Analysis with Multi-Modal Large Language Models.** [2024].<br>
-*F. Bai, Y. Du, T. Huang, M. Q.-H. Meng, B. Zhao.*<br>
-arXiv:2404.00578.<br>
-[[PDF](https://arxiv.org/abs/2404.00578)]
-
-**Vision-language foundation model for 3D medical imaging.** [2025].<br>
-*J. Wu, Y. Wang, Z. Zhong, W. Liao, N. Trayanova, Z. Jiao, H. X. Bai.*<br>
-npj Artificial Intelligence, vol. 1(1), pp. 17.<br>
-[[PDF](https://doi.org/10.1038/s44387-025-00015-9)]
-
-**Med3DVLM: An Efficient Vision-Language Model for 3D Medical Image Analysis.** [2025].<br>
-*Y. Xin, G. C. Ates, K. Gong, W. Shao.*<br>
-IEEE Journal of Biomedical and Health Informatics (Early access).<br>
-[[PDF](https://doi.org/10.1109/JBHI.2025.3604595)]
-
----
-
-# Text-Based Medical Language Models
-
-**Publicly Available Clinical BERT Embeddings.** [2019].<br>
-*E. Alsentzer, J. R. Murphy, W. Boag, W.-H. Weng, D. Jin, T. Naumann, M. B. A. McDermott.*<br>
-arXiv:1904.03323.<br>
-[[PDF](https://arxiv.org/abs/1904.03323)]
-
-**BioBERT: A pre-trained biomedical language representation model for biomedical text mining.** [2020].<br>
-*J. Lee, W. Yoon, S. Kim, D. Kim, S. Kim, C. H. So, J. Kang.*<br>
-Bioinformatics, vol. 36(4), pp. 1234–1240.<br>
-[[PDF](https://doi.org/10.1093/bioinformatics/btz682)]
-
-**Domain-Specific Language Model Pretraining for Biomedical Natural Language Processing.** [2022].<br>
-*Y. Gu, R. Tinn, H. Cheng, M. Lucas, N. Usuyama, X. Liu, T. Naumann, J. Gao, H. Poon.*<br>
-ACM Transactions on Computing for Healthcare, vol. 3(1), pp. 1–23.<br>
-[[PDF](https://doi.org/10.1145/3458754)]
-
-**BioGPT: Generative Pre-trained Transformer for Biomedical Text Generation and Mining.** [2022].<br>
-*R. Luo, L. Sun, Y. Xia, T. Qin, S. Zhang, H. Poon, T.-Y. Liu.*<br>
-Briefings in Bioinformatics, vol. 23(6), pp. bbac409.<br>
-[[PDF](https://doi.org/10.1093/bib/bbac409)]
-
-**GatorTron: A Large Clinical Language Model to Unlock Patient Information from Unstructured Electronic Health Records.** [2022].<br>
-*X. Yang, A. Chen, P. G. Patel, H. Tran, D. Wu et al.*<br>
-arXiv:2203.03540.<br>
-[[PDF](https://arxiv.org/abs/2203.03540)]
-
-**A Study of Generative Large Language Model for Medical Research and Healthcare.** [2023].<br>
-*C. Peng, X. Yang, A. Chen, K. E. Smith, N. PourNejatian et al.*<br>
-npj Digital Medicine, vol. 6(1), pp. 210.<br>
-[[PDF](https://doi.org/10.1038/s41746-023-00958-w)]
-
-**MEDITRON-70B: Scaling Medical Pretraining for Large Language Models.** [2023].<br>
-*Z. Chen, A. H. Cano, A. Romanou, A. Bonnet, K. Matoba et al.*<br>
-arXiv:2311.16079.<br>
-[[PDF](https://arxiv.org/abs/2311.16079)]
-
-**Med-Alpaca: An Open-Source Collection of Medical Conversational AI Models and Training Data.** [2023].<br>
-*T. Z. Huang et al.*<br>
-arXiv:2304.08247.<br>
-[[PDF](https://arxiv.org/abs/2304.08247)]
-
-**BioMedLM: A 2.7B Parameter Language Model Trained on Biomedical Text.** [2024].<br>
-*E. Bolton, D. Hall, M. Yasunaga, T. Lee, C. Manning, P. Liang.*<br>
-arXiv:2403.18421.<br>
-[[PDF](https://arxiv.org/abs/2403.18421)]
-
----
-
-# Radiology Report Generation
-
-**RadLex: A New Method for Indexing Online Educational Materials.** [2006].<br>
-*C. P. Langlotz.*<br>
-RadioGraphics, vol. 26(6), pp. 1595–1597.<br>
-[[PDF](https://doi.org/10.1148/rg.266065168)]
-
-**On the Automatic Generation of Medical Imaging Reports.** [2018] [ACL].<br>
-*B. Jing, P. Xie, E. Xing.*<br>
-[[PDF](https://doi.org/10.18653/v1/P18-1240)]
-
-**ESR Paper on Structured Reporting in Radiology.** [2018].<br>
-*European Society of Radiology (ESR).*<br>
-Insights into Imaging, vol. 9(1), pp. 1–7.<br>
-[[PDF](https://doi.org/10.1007/s13244-017-0588-8)]
-
-**Generating Radiology Reports via Memory-Driven Transformer.** [2020] [EMNLP].<br>
-*Z. Chen, Y. Song, T.-H. Chang, X. Wan.*<br>
-[[PDF](https://doi.org/10.18653/v1/2020.emnlp-main.112)]
-
-**Structured Reporting in Radiology: A Systematic Review to Explore its Potential.** [2022].<br>
-*J. M. Nobel, K. van Geel, S. G. F. Robben.*<br>
-European Radiology, vol. 32, pp. 2837–2854.<br>
-[[PDF](https://doi.org/10.1007/s00330-021-08327-5)]
-
-**R2GenGPT: Radiology Report Generation with Frozen LLMs.** [2023].<br>
-*Z. Wang et al.*<br>
-Meta-Radiology, vol. 1(3), pp. 100033.<br>
-[[PDF](https://doi.org/10.1016/j.metrad.2023.100033)]
-
-**Interactive and Explainable Region-Guided Radiology Report Generation.** [2023] [CVPR].<br>
-*T. Tanida, P. Müller, G. Kaissis, D. Rueckert.*<br>
-[[PDF](https://doi.org/10.1109/CVPR52729.2023.00718)]
-
-**RaDialog: A Large Vision-Language Model for Radiology Report Generation and Conversational Assistance.** [2023].<br>
-*C. Pellegrini, M. Keicher, E. Özsoy, N. Navab.*<br>
-arXiv:2311.18681.<br>
-[[PDF](https://arxiv.org/abs/2311.18681)]
-
-**Translating radiology reports into plain language using ChatGPT and GPT-4 with prompt learning.** [2023].<br>
-*Q. Lyu, J. Tan, M. E. Zapadka, J. Ponnatapura, C. Niu, K. J. Myers, G. Wang, C. T. Whitlow.*<br>
-Visual Computing for Industry, Biomedicine, and Art, vol. 6(1).<br>
-[[PDF](https://doi.org/10.1186/s42492-023-00136-5)]
-
-**Leveraging GPT-4 for Post Hoc Transformation of Free-Text Radiology Reports into Structured Reporting: A Multilingual Feasibility Study.** [2023].<br>
-*L. C. Adams et al.*<br>
-Radiology, vol. 307(4), pp. e230725.<br>
-[[PDF](https://doi.org/10.1148/radiol.230725)]
-
-**RSNA Radiology Reporting Templates.** [2024].<br>
-*Radiological Society of North America (RSNA).*<br>
-[[Link](https://radreport.org/)]
-
-**CoMT: Chain-of-Medical-Thought Reduces Hallucination in Medical Report Generation.** [2024].<br>
-*Y. Jiang, J. Chen, D. Yang, M. Li, S. Wang, T. Wu, K. Li, L. Zhang.*<br>
-arXiv:2406.11451.<br>
-[[PDF](https://arxiv.org/abs/2406.11451)]
-
-**Direct Preference Optimization for Suppressing Hallucinated Prior Exams in Radiology Report Generation.** [2024].<br>
-*O. Banerjee, H.-Y. Zhou, S. Adithan, S. Kwak, K. Wu, P. Rajpurkar.*<br>
-arXiv:2406.06496.<br>
-[[PDF](https://arxiv.org/abs/2406.06496)]
-
-**The Application of Foundation Models in Radiology: Bridging Images, Reports, and Beyond.** [2025].<br>
-*D. Lee.*<br>
-Journal of the Korean Society of Radiology, vol. 86(6), pp. 919.<br>
-[[PDF](https://doi.org/10.3348/jksr.2025.0048)]
-
-**RADAR: A Multimodal Benchmark for 3D Image-Based Radiology Report Review.** [2026].<br>
-*Z. Sun, M. Jagtiani, W. Yim, F. Xia, M. Gunn, M. Yetisgen, A. Ben Abacha.*<br>
-arXiv:2603.06681.<br>
-[[PDF](https://arxiv.org/abs/2603.06681)]
-
-**Prospective evaluation of artificial intelligence (AI) in lumbar spine magnetic resonance imaging (MRI) workflow: from deep learning (DL)-enhanced accelerated acquisition to simultaneous vision-language model (VLM)-based automated report generation.** [2026].<br>
-*J. Park, K. Han, J. S. Oh et al.*<br>
-European Journal of Radiology, vol. 196, pp. 112695.<br>
-[[PDF](https://doi.org/10.1016/j.ejrad.2026.112695)]
-
-**Assessing the ability of large language models to simplify lumbar spine imaging reports into patient-facing text: a pilot study of GPT-4.** [2026].<br>
-*R. Khazanchi, A. R. Chen, P. Desai, D. Herrera, J. R. Staub et al.*<br>
-Skeletal Radiology, vol. 55(2), pp. 361–366.<br>
-[[PDF](https://doi.org/10.1007/s00256-025-05027-9)]
-
----
-
-# Knowledge Distillation & Parameter-Efficient Fine-Tuning
-
-**Distilling the Knowledge in a Neural Network.** [2015].<br>
-*G. Hinton, O. Vinyals, J. Dean.*<br>
-arXiv:1503.02531.<br>
-[[PDF](https://arxiv.org/abs/1503.02531)]
-
-**FitNets: Hints for Thin Deep Nets.** [2015] [ICLR].<br>
-*A. Romero, N. Ballas, S. E. Kahou, A. Chassang, C. Gatta, Y. Bengio.*<br>
-[[PDF](https://arxiv.org/abs/1412.6550)]
-
-**Paying More Attention to Attention: Improving the Performance of Convolutional Neural Networks via Attention Transfer.** [2017] [ICLR].<br>
-*S. Zagoruyko, N. Komodakis.*<br>
-[[PDF](https://arxiv.org/abs/1612.03928)]
-
-**Parameter-Efficient Transfer Learning for NLP.** [2019] [ICML].<br>
-*N. Houlsby, A. Girgis, S. Jastrzebski, B. Morrone, Q. de Laroussilhe, A. Gesmundo, M. Attariyan, S. Gelly.*<br>
-[[PDF](https://arxiv.org/abs/1902.00751)]
-
-**Relational Knowledge Distillation.** [2019] [CVPR].<br>
-*W. Park, D. Kim, Y. Lu, M. Cho.*<br>
-[[PDF](https://doi.org/10.1109/CVPR.2019.00409)]
-
-**Contrastive Representation Distillation.** [2020] [ICLR].<br>
-*Y. Tian, D. Krishnan, P. Isola.*<br>
-[[PDF](https://arxiv.org/abs/1910.10699)]
-
-**Embracing Imperfect Datasets: A Review of Deep Learning Solutions for Medical Image Segmentation.** [2020].<br>
-*N. Tajbakhsh, L. Jeyaseelan, Q. Li, J. N. Chiang, Z. Wu, X. Ding.*<br>
-Medical Image Analysis, vol. 63, pp. 101693.<br>
-[[PDF](https://doi.org/10.1016/j.media.2020.101693)]
-
-**The Power of Scale for Parameter-Efficient Prompt Tuning.** [2021] [EMNLP].<br>
-*B. Lester, R. Al-Rfou, N. Constant.*<br>
-[[PDF](https://doi.org/10.18653/v1/2021.emnlp-main.243)]
-
-**LoRA: Low-Rank Adaptation of Large Language Models.** [2022] [ICLR].<br>
-*E. J. Hu, Y. Shen, P. Wallis, Z. Allen-Zhu, Y. Li, S. Wang, L. Wang, W. Chen.*<br>
-[[PDF](https://arxiv.org/abs/2106.09685)]
-
-**Self-Supervised Learning in Medicine and Healthcare.** [2022].<br>
-*R. Krishnan, P. Rajpurkar, E. J. Topol.*<br>
-Nature Biomedical Engineering, vol. 6(12), pp. 1346–1352.<br>
-[[PDF](https://doi.org/10.1038/s41551-022-00914-1)]
-
-**Expert-Level Detection of Pathologies from Unannotated Chest X-Ray Images via Self-Supervised Learning.** [2022].<br>
-*E. Tiu, E. Talius, P. Patel, C. P. Langlotz, A. Y. Ng, P. Rajpurkar.*<br>
-Nature Biomedical Engineering, vol. 6(12), pp. 1399–1406.<br>
-[[PDF](https://doi.org/10.1038/s41551-022-00936-9)]
-
-**Knowledge distillation: A good teacher is patient and consistent.** [2022] [CVPR].<br>
-*L. Beyer, X. Zhai, A. Royer, L. Markeeva, R. Anil, A. Kolesnikov.*<br>
-[[PDF](https://doi.org/10.1109/CVPR52688.2022.01065)]
-
-**LLaMA-Adapter: Efficient Fine-tuning of Language Models with Zero-init Attention.** [2023].<br>
-*R. Zhang, J. Han, C. Liu, P. Gao, A. Zhou, X. Hu, S. Yan, P. Lu, H. Li, Y. Qiao.*<br>
-arXiv:2303.16199.<br>
-[[PDF](https://arxiv.org/abs/2303.16199)]
-
-**TinyLLaVA: A Framework of Small-scale Large Multimodal Models.** [2024].<br>
-*B. Zhou, Y. Hu, X. Weng, J. Jia, J. Luo, X. Liu, J. Wu, L. Huang.*<br>
-arXiv:2402.14289.<br>
-[[PDF](https://arxiv.org/abs/2402.14289)]
-
-**VLM-KD: Knowledge Distillation from VLM for Long-Tail Visual Recognition.** [2024].<br>
-*Z. Zhang, G. P. Meyer, Z. Lu, A. Shrivastava, A. Ravichandran, E. M. Wolff.*<br>
-arXiv:2408.16930.<br>
-[[PDF](https://arxiv.org/abs/2408.16930)]
-
-**QLoRA: Efficient Finetuning of Quantized Language Models.** [2024] [NeurIPS].<br>
-*T. Dettmers, A. Pagnoni, A. Holtzman, L. Zettlemoyer.*<br>
-[[PDF](https://arxiv.org/abs/2305.14314)]
-
-**Enhancing Medical Large Vision-Language Models via Alignment Distillation.** [2026] [AAAI].<br>
-*A. Chang, T. Wang, F. Ma.*<br>
-Proceedings of the AAAI Conference on Artificial Intelligence, vol. 40(24), pp. 19952–19960.<br>
-[[PDF](https://doi.org/10.1609/aaai.v40i24.39079)]
-
----
-
-# Lumbar Spine Specialized Systems
-
-**Magnetic Resonance Classification of Lumbar Intervertebral Disc Degeneration.** [2001].<br>
-*C. W. A. Pfirrmann, A. Metzdorf, M. Zanetti, J. Hodler, N. Boos.*<br>
-Spine, vol. 26(17), pp. 1873–1878.<br>
-[[PDF](https://doi.org/10.1097/00007632-200109010-00011)]
-
-**Automated Radiological Grading of Spinal MRIs.** [2014].<br>
-*M. Lootus, T. Kadir, A. Zisserman.*<br>
-LNCS vol. 17, pp. 119–130.<br>
-[[PDF](https://doi.org/10.1007/978-3-319-07269-2_10)]
-
-**Detection and Labeling of Vertebrae in MR Images Using Deep Learning with Clinical Annotations as Training Data.** [2017].<br>
-*D. Forsberg, E. Lundström, H. Ahlström et al.*<br>
-Journal of Digital Imaging, vol. 30, pp. 406–412.<br>
-[[PDF](https://doi.org/10.1007/s10278-017-9945-x)]
-
-**SpineNet: Automated Classification and Evidence Visualization in Spinal MRIs.** [2017].<br>
-*A. Jamaludin, T. Kadir, A. Zisserman.*<br>
-Medical Image Analysis, vol. 41, pp. 63–73.<br>
-[[PDF](https://doi.org/10.1016/j.media.2017.07.002)]
-
-**Deep Spine: Automated Lumbar Vertebral Segmentation, Disc-Level Designation, and Spinal Stenosis Grading using Deep Learning.** [2018] [MLHC].<br>
-*J.-T. Lu, S. Pedemonte, B. Bizzo, S. Doyle, K. P. Andriole, M. H. Michalski, R. G. Gonzalez, S. R. Pomerantz.*<br>
-Proceedings of Machine Learning Research, vol. 85, pp. 403–419.<br>
-[[PDF](https://proceedings.mlr.press/v85/lu18a.html)]
-
-**Automated Pathogenesis-Based Diagnosis of Lumbar Neural Foraminal Stenosis via Deep Multiscale Multitask Learning.** [2018].<br>
-*Z. Han, B. Wei, S. Leung et al.*<br>
-Neuroinformatics, vol. 16(3–4), pp. 325–337.<br>
-[[PDF](https://doi.org/10.1007/s12021-018-9365-1)]
-
-**Iterative Fully Convolutional Neural Networks for Automatic Vertebra Segmentation and Identification.** [2019].<br>
-*N. Lessmann, B. van Ginneken, P. A. de Jong, I. Išgum.*<br>
-Medical Image Analysis, vol. 53, pp. 142–155.<br>
-[[PDF](https://doi.org/10.1016/j.media.2019.02.005)]
-
-**Automated Measurement of Lumbar Lordosis on Radiographs Using Machine Learning and Computer Vision.** [2020].<br>
-*B. H. Cho, D. Kaji, Z. B. Cheung, I. B. Ye, R. Tang, A. Ahn, O. Carrillo, J. T. Schwartz, A. A. Valliani, E. K. Oermann, V. Arvind, D. Ranti, L. Sun, J. S. Kim, S. K. Cho.*<br>
-Global Spine Journal, vol. 10(5), pp. 611–618.<br>
-[[PDF](https://doi.org/10.1177/2192568219868190)]
-
-**Deep Learning Model for Automated Detection and Classification of Central Canal, Lateral Recess, and Neural Foraminal Stenosis at Lumbar Spine MRI.** [2021].<br>
-*J. T. P. D. Hallinan, L. Zhu, K. Yang, A. S. Makmur, A. Algazwi, Y. H. Lim et al.*<br>
-Radiology, vol. 300(1), pp. 130–138.<br>
-[[PDF](https://doi.org/10.1148/radiol.2021204289)]
-
-**Deep learning-based vertebral body segmentation with extraction of spinal measurements and disorder disease classification.** [2022].<br>
-*R. F. Masood, I. A. Taj, M. B. Khan, M. A. Qureshi, T. Hassan.*<br>
-Biomedical Signal Processing and Control, vol. 74, pp. 103230.<br>
-[[PDF](https://doi.org/10.1016/j.bspc.2021.103230)]
-
-**Localization and Edge-Based Segmentation of Lumbar Spine Vertebrae to Identify the Deformities Using Deep Learning Models.** [2022].<br>
-*M. Mushtaq, M. U. Akram, N. S. Alghamdi, J. Fatima, R. F. Masood.*<br>
-Sensors, vol. 22(4), pp. 1547.<br>
-[[PDF](https://doi.org/10.3390/s22041547)]
-
-**A Composite Dataset of Lumbar Spine Images with Measurements and Disorders for AI-Based Medical Assistance.** [2022] [ICoDT2].<br>
-*R. F. Masood, T. Hassan, H. Raja, B. Hassan, J. Dias, N. Werghi.*<br>
-[[PDF](https://doi.org/10.1109/ICoDT255437.2022.9787452)]
-
-**Using Natural Language Processing to Identify Low Back Pain in Imaging Reports.** [2022].<br>
-*Y. Kim, C. Song, G. Song, S. B. Kim, H.-W. Han, I. Han.*<br>
-Applied Sciences, vol. 12(24), pp. 12521.<br>
-[[PDF](https://doi.org/10.3390/app122412521)]
-
-**Automated Spinal MRI Labelling from Reports Using a Large Language Model.** [2024] [MICCAI].<br>
-*R. Y. Park, R. Windsor, A. Jamaludin, A. Zisserman.*<br>
-[[PDF](https://doi.org/10.1007/978-3-031-72086-4_10)]
-
-**Classification of lumbar spine disorders using large language models and MRI segmentation.** [2024].<br>
-*R. Dong, X. Cheng, M. Kang, Y. Qu.*<br>
-BMC Medical Informatics and Decision Making, vol. 24(1), pp. 343.<br>
-[[PDF](https://doi.org/10.1186/s12911-024-02740-8)]
-
-**Lumbar spine segmentation in MR images: A dataset and a public benchmark.** [2024].<br>
-*J. W. van der Graaf, M. L. van Hooff, C. F. M. Buckens, M. Rutten, J. L. C. van Susante, R. J. Kroeze, M. de Kleuver, B. van Ginneken, N. Lessmann.*<br>
-Scientific Data, vol. 11(1), pp. 264.<br>
-[[PDF](https://doi.org/10.1038/s41597-024-03098-5)]
-
-**SpineFM: Leveraging Foundation Models for Automatic Spine X-ray Segmentation.** [2024].<br>
-*S. J. Simons, B. W. Papież.*<br>
-arXiv:2411.00326. Accepted at ISBI 2025.<br>
-[[PDF](https://arxiv.org/abs/2411.00326)]
-
-**Diffusion-Based Semantic Segmentation of Lumbar Spine MRI Scans of Lower Back Pain Patients.** [2024].<br>
-*M. Monzon, T. Iff, E. Konukoglu, C. R. Jutzeler.*<br>
-arXiv:2411.10755.<br>
-[[PDF](https://arxiv.org/abs/2411.10755)]
-
-**AutoSpineAI: Lightweight Multimodal CAD Framework for Lumbar Spine MRI Assessments.** [2025].<br>
-*S. Salem, A. Habib, M. Raza, Z. Al-Huda, O. Al-maqtari, B. Ertuğrul, Ö. Yıldırım, Y. H. Gu, M. A. Al-antari.*<br>
-[[PDF](https://openreview.net/pdf?id=RKOKlm4e4U)]
-
-**AI-Driven MRI Spine Pathology Detection.** [2025].<br>
-*B. Subramanian, N. Kumarasami, P. Shastry, R. Sripadraj, K. Sivasailam, D. Anandakumar, A. Ramachandran.*<br>
-arXiv:2503.20316.<br>
-[[PDF](https://arxiv.org/abs/2503.20316)]
-
-**Automated Diagnosis and Grading of Lumbar Intervertebral Disc Degeneration Based on a Modified YOLO Framework.** [2025].<br>
-*A. Wang, T. Wang, X. Liu, N. Fan, S. Yuan, P. Du, C. Zou, R. Chen, Y. Xi, Z. Gu, H. Song, Q. Fei, Y. Zhang, L. Zang.*<br>
-Frontiers in Bioengineering and Biotechnology, vol. 13, pp. 1526478.<br>
-[[PDF](https://doi.org/10.3389/fbioe.2025.1526478)]
-
-**SpineBench: Benchmarking Multimodal LLMs for Spinal Pathology Analysis.** [2025] [ACM Multimedia].<br>
-*C. Zhang, Z. Li, P. Li, X. Cui, S. Xia, W. Yan, Y. Zhang, Q. Zhuang.*<br>
-[[PDF](https://doi.org/10.1145/3664647.3681580)]
-
-**Deep Learning-Based Lumbar Spinal Canal Stenosis Classification Using MRI Scans.** [2025].<br>
-*G. G. de Celis, W. Bukaita.*<br>
-Medical Research Archives, vol. 13(7).<br>
-[[PDF](https://doi.org/10.18103/mra.v13i7.6660)]
-
-**Automated Lumbar Disc Intensity Classification From MRI Scans Using Region-Based CNNs and Transformer Models.** [2025].<br>
-*H. Ulutas, M. F. Erkoc, E. Ozbay, M. E. Sahin, M. O. Karakus, E. Yuce.*<br>
-International Journal of Imaging Systems and Technology, vol. 35(6), pp. e70229.<br>
-[[PDF](https://doi.org/10.1002/ima.70229)]
-
-**Deep Learning-Based Automated Segmentation and Quantification of the Dural Sac Cross-Sectional Area in Lumbar Spine MRI.** [2025].<br>
-*G. Ghobrial, C. Roth.*<br>
-Frontiers in Radiology, vol. 5, pp. 1503625.<br>
-[[PDF](https://doi.org/10.3389/fradi.2025.1503625)]
-
----
-
-# Object Detection Architectures
-
-**Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks.** [2015] [NeurIPS].<br>
-*S. Ren, K. He, R. Girshick, J. Sun.*<br>
-[[PDF](https://arxiv.org/abs/1506.01497)]
-
-**You Only Look Once: Unified, Real-Time Object Detection.** [2016] [CVPR].<br>
-*J. Redmon, S. Divvala, R. Girshick, A. Farhadi.*<br>
-[[PDF](https://doi.org/10.1109/CVPR.2016.91)]
-
-**End-to-End Object Detection with Transformers.** [2020] [ECCV].<br>
-*N. Carion, F. Massa, G. Synnaeve, N. Usunier, A. Kirillov, S. Zagoruyko.*<br>
-LNCS vol. 12346, pp. 213–229.<br>
-[[PDF](https://doi.org/10.1007/978-3-030-58452-8_13)]
-
-**Cascade R-CNN: Multi-Stage Object Detection.** [2021].<br>
-*Z. Cai, N. Vasconcelos.*<br>
-IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 43(5), pp. 1483–1498.<br>
-[[PDF](https://doi.org/10.1109/TPAMI.2019.2956516)]
-
----
-
-# Datasets & Benchmarks
-
-**MIMIC-III, a Freely Accessible Critical Care Database.** [2016].<br>
-*A. E. W. Johnson, T. J. Pollard, L. Shen, L.-w. H. Lehman, M. Feng, M. Ghassemi, B. Moody, P. Szolovits, L. A. Celi, R. G. Mark.*<br>
-Scientific Data, vol. 3, pp. 160035.<br>
-[[PDF](https://doi.org/10.1038/sdata.2016.35)]
-
-**ChestX-ray8: Hospital-Scale Chest X-Ray Database and Benchmarks.** [2017] [CVPR].<br>
-*X. Wang, Y. Peng, L. Lu, Z. Lu, M. Bagheri, R. M. Summers.*<br>
-[[PDF](https://doi.org/10.1109/CVPR.2017.369)]
-
-**CheXpert: A Large Chest Radiograph Dataset with Uncertainty Labels and Expert Comparison.** [2019] [AAAI].<br>
-*J. Irvin, P. Rajpurkar, M. Ko, Y. Yu, S. Ciurea-Ilcus, C. Chute et al.*<br>
-[[PDF](https://doi.org/10.1609/aaai.v33i01.3301590)]
-
-**MIMIC-CXR, a De-identified Publicly Available Database of Chest Radiographs with Free-Text Reports.** [2019].<br>
-*A. E. W. Johnson, T. J. Pollard, N. R. Greenbaum, M. P. Lungren, C.-y. Deng, Y. Peng, Z. Lu, R. G. Mark, S. J. Berkowitz, S. Horng.*<br>
-Scientific Data, vol. 6(1), pp. 317.<br>
-[[PDF](https://doi.org/10.1038/s41597-019-0322-0)]
-
-**A Large Annotated Medical Image Dataset for the Development and Evaluation of Segmentation Algorithms.** [2019].<br>
-*A. L. Simpson, M. Antonelli, S. Bakas, M. Bilello, K. Farahani, B. van Ginneken et al.*<br>
-arXiv:1902.09063.<br>
-[[PDF](https://arxiv.org/abs/1902.09063)]
-
-**What Disease Does This Patient Have? A Large-Scale Open Domain Question Answering Dataset from Medical Exams.** [2021].<br>
-*D. Jin, E. Pan, N. Oufattole, W.-H. Weng, H. Fang, P. Szolovits.*<br>
-Applied Sciences, vol. 11(14), pp. 6421.<br>
-[[PDF](https://doi.org/10.3390/app11146421)]
-
-**VerSe: A Vertebrae Labelling and Segmentation Benchmark for Multi-Detector CT Images.** [2021].<br>
-*A. Sekuboyina, M. E. Husseini, A. Bayat, M. Löffler, H. Liebl, H. Li, G. Tetteh et al.*<br>
-Medical Image Analysis, vol. 73, pp. 102166.<br>
-[[PDF](https://doi.org/10.1016/j.media.2021.102166)]
-
-**MIMIC-IV, a Freely Accessible Electronic Health Record Dataset.** [2023].<br>
-*A. Johnson, L. Bulgarelli, T. Pollard, S. Horng, L. A. Celi, R. Mark.*<br>
-Scientific Data, vol. 10, pp. 1.<br>
-[[PDF](https://doi.org/10.1038/s41597-022-01899-x)]
-
-**The RSNA Lumbar Degenerative Imaging Spine Classification (LumbarDISC) Dataset.** [2026].<br>
-*T. J. Richards, A. E. Flanders, E. Colak, L. M. Prevedello, R. L. Ball, F. Kitamura, J. Mongan et al.*<br>
-Radiology: Artificial Intelligence, vol. 8(2).<br>
-[[PDF](https://doi.org/10.1148/ryai.250480)]
-
----
-
-# Clinical AI Deployment & Validation
-
-**AI in Health and Medicine.** [2022].<br>
-*P. Rajpurkar, E. Chen, O. Banerjee, E. J. Topol.*<br>
-Nature Medicine, vol. 28(1), pp. 31–38.<br>
-[[PDF](https://doi.org/10.1038/s41591-021-01614-0)]
-
-**Multimodal Biomedical AI.** [2022].<br>
-*J. N. Acosta, G. J. Falcone, P. Rajpurkar, E. J. Topol.*<br>
-Nature Medicine, vol. 28(9), pp. 1773–1784.<br>
-[[PDF](https://doi.org/10.1038/s41591-022-01981-2)]
-
-**A Foundation Model for Generalizable Disease Detection from Retinal Images.** [2023].<br>
-*Y. Zhou et al.*<br>
-Nature, vol. 622, pp. 156–163.<br>
-[[PDF](https://doi.org/10.1038/s41586-023-06555-x)]
-
-**The Shaky Foundations of Large Language Models and Foundation Models for Electronic Health Records.** [2023].<br>
-*M. Wornow, Y. Xu, R. Thapa, B. Patel et al.*<br>
-npj Digital Medicine, vol. 6, pp. 135.<br>
-[[PDF](https://doi.org/10.1038/s41746-023-00879-8)]
-
-**Clinical, Cultural, Computational, and Regulatory Considerations to Deploy AI in Radiology: A Review and Call to Action.** [2024].<br>
-*M. G. Linguraru et al.*<br>
-Radiology: Artificial Intelligence, vol. 6(4), pp. e240225.<br>
-[[PDF](https://doi.org/10.1148/ryai.240225)]
-
----
-
-# Statistical & Evaluation Methods
-
-**Meta-analysis in clinical trials.** [1986].<br>
-*R. DerSimonian, N. Laird.*<br>
-Controlled Clinical Trials, vol. 7(3), pp. 177–188.<br>
-[[PDF](https://doi.org/10.1016/0197-2456(86)90046-2)]
-
-**Comparing images using the Hausdorff distance.** [1993].<br>
-*D. P. Huttenlocher, G. A. Klanderman, W. J. Rucklidge.*<br>
-IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 15(9), pp. 850–863.<br>
-[[PDF](https://doi.org/10.1109/34.232073)]
-
-**Measuring inconsistency in meta-analyses.** [2003].<br>
-*J. P. T. Higgins, S. G. Thompson, J. J. Deeks, D. G. Altman.*<br>
-BMJ, vol. 327(7414), pp. 557–560.<br>
-[[PDF](https://doi.org/10.1136/bmj.327.7414.557)]
-
-**Elements of Information Theory.** [2006].<br>
-*T. M. Cover, J. A. Thomas.*<br>
-2nd edition, Wiley-Interscience.<br>
-[[PDF](https://doi.org/10.1002/047174882X)]
-
-**Recommendations for examining and interpreting funnel plot asymmetry in meta-analyses of randomised controlled trials.** [2011].<br>
-*J. A. C. Sterne, A. J. Sutton, J. P. A. Ioannidis, N. Terrin, D. R. Jones et al.*<br>
-BMJ, vol. 343, pp. d4002.<br>
-[[PDF](https://doi.org/10.1136/bmj.d4002)]
-
-**The PRISMA 2020 statement: an updated guideline for reporting systematic reviews.** [2021].<br>
-*M. J. Page, J. E. McKenzie, P. M. Bossuyt, I. Boutron, T. C. Hoffmann, C. D. Mulrow et al.*<br>
-BMJ, vol. 372, pp. n71.<br>
-[[PDF](https://doi.org/10.1136/bmj.n71)]
-
----
+## Background
+
+Vision-language models (VLMs) and large language models (LLMs) are being adapted to lumbar spine magnetic resonance imaging (MRI), alongside segmentation networks that outline vertebrae, discs and the canal. Earlier reviews organize this literature by clinical task or data type. This review asks instead how the evidence was obtained: on which images each model was tested, against which reference, at which institution, and whether the reported segmentation accuracy is sufficient for the millimeter criteria used to grade stenosis.
+
+PubMed, IEEE Xplore, Scopus, arXiv and Google Scholar were searched from January 2015 to April 2026. Each spine AI study was coded with the items of the 2024 Checklist for Artificial Intelligence in Medical Imaging (CLAIM) on prospective design (item 5), data partitions and internal testing (items 19 and 32) and external testing (item 33). A test set was counted as external when the publication described it as coming from a source other than the development data, and as internal when it was drawn from the development datasets, whatever its label.
+
+<p align="center"><img src="assets/figure_1.png" width="900" alt="Figure 1"></p>
+
+*Figure 1. Lumbar reporting workflow, reviewed model families, audited evidence and the main gap at each step. (B) The 51 studies (one dot each) by workflow step and test design.*
+
+## Method
+
+### From DSC to millimeters
+
+A canal of true area $A$ is modeled as a circle of radius $r_G = \sqrt{A/\pi}$, and the predicted mask as a concentric circle of radius $r_P$. For under-segmentation ($r_P \le r_G$),
+
+$$
+\mathrm{DSC} = \frac{2 r_P^2}{r_P^2 + r_G^2}, \qquad
+\Delta d = 2 r_G \left(1 - \sqrt{\frac{\mathrm{DSC}}{2 - \mathrm{DSC}}}\right), \tag{1}
+$$
+
+where $\Delta d$ is the error in anteroposterior diameter. For over-segmentation the radii exchange roles, so the measured area is $A(2-\mathrm{DSC})/\mathrm{DSC}$ instead of $A\,\mathrm{DSC}/(2-\mathrm{DSC})$. Combining both directions gives, for each DSC, the range of true canal areas that can be measured on the wrong side of the 70 mm² criterion for central stenosis. Inverting both expressions, with $k = \delta/2r_G$, gives the smallest DSC that keeps the diameter error within $\delta$ and the misclassification range within $A \pm w$:
+
+$$
+\mathrm{DSC}_{\delta} = \max\left[\frac{2(1-k)^2}{1+(1-k)^2},\ \frac{2}{1+(1+k)^2}\right], \qquad
+\mathrm{DSC}_{w} = \max\left[\frac{2(A-w)}{2A-w},\ \frac{2A}{2A+w}\right]. \tag{2}
+$$
+
+The criteria are an anteroposterior diameter below 10 mm and a cross-sectional area below 70 mm² (Steurer et al., 2011), compared with the posterior disc height of 4 mm or less at which nerve-root compression occurred in eight of ten cadaveric foramina (Hasegawa et al., 1995).
+
+### Tokens and memory
+
+A two-dimensional vision transformer produces $N = HW/P^2$ tokens per slice and cubic three-dimensional patches $M = HWD/P^3$ tokens per volume; full self-attention evaluates $N^2$ token pairs per layer. Weight memory is the parameter count multiplied by 2 bytes (16-bit) or 0.5 bytes (4-bit), with 1 GB = 10⁹ bytes, without activations or key-value cache. These values are compared with the footprints that the Gemma 3 technical report lists for its quantized checkpoints.
+
+## Results
+
+### Test design of the 51 studies
+
+| Workflow step | Studies | Internal only or not described | Preprint | External, retrospective | Prospective |
+|---|---:|---:|---:|---:|---:|
+| Segmentation and measurement | 16 | 14 | 1 | 0 | 1 |
+| Grading and detection | 25 | 18 | 1 | 6 | 0 |
+| Reading reports | 6 | 6 | 0 | 0 | 0 |
+| Writing reports | 4 | 3 | 0 | 0 | 1 |
+| **All** | **51** | **41** | **2** | **6** | **2** |
+
+Of the 49 peer-reviewed studies, 35 were evaluated on MRI; 31 of these reported internal testing only or did not describe their test data, 3 reported a retrospective external test and 1 was a prospective evaluation (a commercial VLM-based reporting system in 70 patients at two institutions). The other 14 were evaluated on radiographs (9), report text (4) or computed tomography (1). Thirty-nine of the 51 studies appeared from 2023 onward, and 32 of these reported neither external nor prospective testing.
+
+<p align="center"><img src="assets/figure_2.png" width="860" alt="Figure 2"></p>
+
+*Figure 2. (A) Flow of the 51 studies to the test-design counts. (B) The same studies by year of publication and test design.*
+
+### Model families
+
+Segmentation networks carry the most lumbar evidence: on the SPIDER benchmark, nnU-Net reached DSC values of 0.92 for vertebrae, 0.86 for discs and 0.92 for the canal. The developers of the general medical VLMs report no lumbar MRI evaluation. Their only spine evaluation is SpineBench, a third-party multiple-choice benchmark built from public radiographs and the RSNA 2024 lumbar MRI challenge data, on which LLaVA-Med v1.5, HuatuoGPT-Vision, Med-Flamingo and MedGemma 4B answered 12% to 22% of 1000 diagnosis questions correctly, against 20% by chance, with no separate results for MRI.
+
+<p align="center"><img src="assets/figure_3.png" width="520" alt="Figure 3"></p>
+
+*Figure 3. Documented capabilities of 13 representative models. Light cells mark partial or indirect evidence, such as volumes read as two-dimensional slices or spine evaluation on radiographs, CT, multiple-choice questions or report text instead of lumbar MRI.*
+
+### Reported segmentation accuracy
+
+The reported DSC values differ in imaging modality, anatomical structure, metric and test design, so they are plotted by structure and not pooled. The values with their sources and test data are in [`data/forest_dsc.csv`](data/forest_dsc.csv).
+
+<p align="center"><img src="assets/figure_4.png" width="820" alt="Figure 4"></p>
+
+*Figure 4. Dice similarity coefficients reported for spine segmentation, grouped by structure. The diamond is the pooled estimate of a published meta-analysis of disc segmentation; the other rows are not pooled.*
+
+### Millimeter consequences of a given DSC
+
+| DSC | Predicted area (mm²) | Area error (mm²) | Diameter error, under / over (mm) | Share of 10 mm (%) | True areas that can cross 70 mm² |
+|---:|---:|---:|---:|---:|---:|
+| 0.86 | 52.8 | 17.2 | 1.24 / 1.43 | 12 | 52.8 to 92.8 |
+| 0.90 | 57.3 | 12.7 | 0.90 / 1.00 | 9 | 57.3 to 85.6 |
+| 0.92 | 59.6 | 10.4 | 0.73 / 0.79 | 7 | 59.6 to 82.2 |
+| 0.948 | 63.1 | 6.9 | 0.48 / 0.50 | 5 | 63.1 to 77.7 |
+| 0.95 | 63.3 | 6.7 | 0.46 / 0.48 | 5 | 63.3 to 77.4 |
+| 0.966 | 65.4 | 4.6 | 0.32 / 0.33 | 3 | 65.4 to 74.9 |
+| 0.97 | 65.9 | 4.1 | 0.28 / 0.29 | 3 | 65.9 to 74.3 |
+
+Predicted area, area error and share of 10 mm are for a true area of 70 mm² and under-segmentation. At a DSC of 0.92, the canal value of nnU-Net on SPIDER, the anteroposterior diameter is off by 0.73 mm (under-segmentation) or 0.79 mm (over-segmentation), and true areas from 59.6 to 82.2 mm² can be measured on the wrong side of 70 mm²; at 0.89, one standard deviation lower, the range is 56.1 to 87.3 mm². Keeping the diameter error within 0.5 mm needs a DSC of 0.948, and keeping the range within 70 ± 5 mm² needs 0.966. The canal values reported so far range from 0.91 to 0.93.
+
+<p align="center"><img src="assets/figure_5.png" width="820" alt="Figure 5"></p>
+
+*Figure 5. (A) Error in anteroposterior diameter against DSC for canals of 50, 70 and 100 mm². (B) Range of true canal areas that can be measured on the wrong side of the 70 mm² criterion, with the reported canal DSC values.*
+
+### Public datasets
+
+| Dataset | Modality | Planes and sequences | Size | Annotation |
+|---|---|---|---|---|
+| Sudirman et al. (2019) | MR | Sagittal and axial; T1 and T2 | 515 patients; 48,345 slices | Four regions on axial T1 slices of the last three discs |
+| Composite mid-sagittal set (2022) | MR | Mid-sagittal | 514 images | Vertebral body masks; spinal measurements |
+| Multi-disorder set (2025) | MR | Sagittal; T1 and T2 | 1,038 images | 8,991 masks in six classes |
+| SPIDER (2024) | MR | Sagittal; T1 and T2 | 447 series of 218 patients, four hospitals | Masks of vertebrae, discs and canal; per-level gradings |
+| RSNA LumbarDISC (2026) | MR | Multiplanar, multisequence | 2,697 patients, eight institutions | Canal, foraminal and subarticular stenosis at five levels; no masks |
+| Liu et al. (2024) | MR | CISS, DESS and T2 TSE | 14 healthy adults | Nerve-root annotations; 3D cord models |
+| VerSe (2021) | CT | CT volumes | 374 scans of 355 patients | 4,505 vertebrae |
+| CTSpine1K (2025) | CT | CT volumes | 1,005 volumes | 11,172 vertebrae |
+
+Each public MRI dataset of patients with segmentation masks annotates a single plane. At least eight of the audited studies drew their MRI data from the single-hospital dataset of Sudirman et al. or sets derived from it.
+
+### Report generation and hallucinations
+
+Of the four lumbar report generators, three were scored by similarity to reference text (BLEU-1 0.687, ROUGE-L 0.3, ROUGE-1 15.31%); one commercial system was compared with radiologist consensus in a prospective study. The hallucination schema extends the division of medical VLM hallucinations into consistency and completeness errors to level-by-level lumbar reporting.
+
+<p align="center"><img src="assets/figure_6.png" width="820" alt="Figure 6"></p>
+
+*Figure 6. Four types of hallucination in a generated lumbar MRI report, shown on a schematic sagittal spine, with the measure proposed for radiologist reader studies. The schematic and report phrases are illustrative, not patient data.*
+
+### Volumetric input and memory
+
+For a 512 × 512 × 32 series at patch size 16, one slice gives 1,024 tokens and 32 slices encoded separately give 32,768, so joint attention evaluates 1.07 × 10⁹ token pairs per layer, against 4.19 × 10⁶ for the 2,048 tokens of cubic three-dimensional patches. MedGemma 1.5 reads a volume as at most 85 axial slices (21,760 vision tokens); four lumbar series of 22 slices would exceed this.
+
+| Model | Parameters | 16-bit weights (GB) | 4-bit weights (GB) |
+|---|---:|---:|---:|
+| MedSAM image encoder (SAM ViT-B) | 0.091 B | 0.18 | 0.05 |
+| MedGemma 4B and 1.5 | 4.30 B | 8.6 | 2.2 |
+| LLaVA-Med (7B language model) | 7 B (nominal) | 14.0 | 3.5 |
+| Med-Flamingo (OpenFlamingo-9B) | 9 B (nominal) | 18.0 | 4.5 |
+| MedGemma 27B | 27.43 B | 54.9 | 13.7 |
+| Gemma 4, largest model | 31 B (nominal) | 62.0 | 15.5 |
+
+The Gemma 3 report lists 54.0 GB in 16-bit and 14.1 GB in 4-bit form for the 27-billion-parameter model, but 32.8 GB once an 8-bit key-value cache for a 32,768-token context is added, against 7.3 GB for the 4-billion-parameter model.
+
+<p align="center"><img src="assets/figure_7.png" width="820" alt="Figure 7"></p>
+
+*Figure 7. Weight memory of the reviewed models at 16-bit and 4-bit precision against graphics processing unit memory tiers.*
+
+### Reporting checklist
+
+| Item | What to report |
+|---|---|
+| Test design | Internal, external and prospective test sets, with institutions, scanner vendors, field strengths and enrollment dates (CLAIM items 5, 19, 32, 33) |
+| Reference standard | Number, subspecialty and experience of readers, consensus rule and agreement, or source of mined labels |
+| Segmentation accuracy | DSC per structure, with its dispersion, on a public benchmark such as SPIDER |
+| Measurement error | Area and diameter error in millimeters at 70 mm², 10 mm and 4 mm, not DSC alone |
+| Input | Which of sagittal T1, sagittal T2, axial T2 and STIR are read, whether together, and accuracy per sequence and plane |
+| Generated reports | Level-assignment, grading, phantom-finding and omission errors per examination, counted by radiologists, as the primary end point |
+| Deployment | Weight and key-value cache memory at the precision and context length used, slice budget, and accuracy on the local GPU after quantization |
+
+<!-- ## Data
+
+[`data/spine_ai_studies.csv`](data/spine_ai_studies.csv) has one row per study: workflow step, imaging modality (MR, CT, XR for radiograph, Text for report text), task, test data as reported, and the coding of external testing, prospective design and preprint status. For Dong et al. (2024) the coding follows the counts of the article, which treat its 514-case test as external; the note column records that the article's study table marks that set as drawn from the development data.
+
+[`data/forest_dsc.csv`](data/forest_dsc.csv) gives each value of Figure 4 with its standard deviation or confidence interval, test data and location in the source.
+
+[`data/references.csv`](data/references.csv) lists the 97 references in the order of the article, with a flag for the 51 spine AI studies. -->
+
+<!-- ## Repository structure
+
+```text
+assets/                     figures of the article (PNG)
+data/
+  spine_ai_studies.csv      coding of the 51 spine AI studies
+  forest_dsc.csv            reported Dice values of Figure 4
+  references.csv            the 97 references
+``` -->
 
 ## Citation
 
-If you find this repository useful for your research, please cite our survey:
-
 ```bibtex
-@article{masood2026alsd_vlm_review,
-  author  = {Rao Farhat Masood and Imtiaz Ahmad Taj},
-  title   = {Automated Lumbar Spine Diagnostics via Vision--Language Foundation Models: A Systematic Mathematical Review of Architectures, Distillation Strategies and Clinical Deployment Pathways},
-  journal = {TBD},
-  year    = {2026},
-  note    = {Under-Finalization}
+@unpublished{masood2026lumbarvlm,
+  author = {Masood, Rao Farhat and Taj, Imtiaz Ahmad and Khan, Muhammad Babar and Qureshi, Muhammad Asad},
+  title  = {Vision-Language Foundation Models for Lumbar Spine Diagnostics: A Methodological Review of Architectures, Validation Evidence and Deployment Pathways},
+  note   = {Under review, European Journal of Radiology},
+  year   = {2026}
 }
 ```
 
----
+## License
 
-<!-- ## Contact
+The content of this repository is released under the [MIT License](LICENSE).
 
-For any questions or suggestions, please open an issue or contact [Rao Farhat Masood](mailto:farhatmasood.fm@gmail.com). -->
+## References
 
----
+References are numbered in the order of the article. Each entry links to its DOI, or to the publisher page where no DOI exists.
 
-## Star History
-
-If you find this work helpful, please consider giving it a ⭐!
+1. V.M. Ravindra, S.S. Senglaub, A. Rattani, M.C. Dewan, R. Härtl, E. Bisson, et al., Degenerative lumbar spine disease: estimating global incidence and worldwide volume, Global Spine J. 8 (2018) 784–794. <https://doi.org/10.1177/2192568218770769>
+2. GBD 2021 Low Back Pain Collaborators, Global, regional, and national burden of low back pain, 1990-2020, its attributable risk factors, and projections to 2050: a systematic analysis of the Global Burden of Disease Study 2021, Lancet Rheumatol. 5 (2023) e316–e329. <https://doi.org/10.1016/s2665-9913(23)00098-x>
+3. C.W.A. Pfirrmann, A. Metzdorf, M. Zanetti, J. Hodler, N. Boos, Magnetic resonance classification of lumbar intervertebral disc degeneration, Spine 26 (2001) 1873–1878. <https://doi.org/10.1097/00007632-200109010-00011>
+4. J.-T. Lu, S. Pedemonte, B. Bizzo, S. Doyle, K.P. Andriole, M.H. Michalski, et al., Deep Spine: automated lumbar vertebral segmentation, disc-level designation, and spinal stenosis grading using deep learning, Proceedings of the 3rd Machine Learning for Healthcare Conference, PMLR 85, 2018, pp. 403–419. <https://proceedings.mlr.press/v85/lu18a.html>
+5. F. Isensee, P.F. Jaeger, S.A.A. Kohl, J. Petersen, K.H. Maier-Hein, nnU-Net: a self-configuring method for deep learning-based biomedical image segmentation, Nat. Methods 18 (2021) 203–211. <https://doi.org/10.1038/s41592-020-01008-z>
+6. J.W. van der Graaf, M.L. van Hooff, C.F.M. Buckens, M. Rutten, J.L.C. van Susante, R.J. Kroeze, et al., Lumbar spine segmentation in MR images: a dataset and a public benchmark, Sci. Data 11 (2024) 264. <https://doi.org/10.1038/s41597-024-03090-w>
+7. M. Moor, O. Banerjee, Z.S.H. Abad, H.M. Krumholz, J. Leskovec, E.J. Topol, et al., Foundation models for generalist medical artificial intelligence, Nature 616 (2023) 259–265. <https://doi.org/10.1038/s41586-023-05881-4>
+8. P. Rajpurkar, E. Chen, O. Banerjee, E.J. Topol, AI in health and medicine, Nat. Med. 28 (2022) 31–38. <https://doi.org/10.1038/s41591-021-01614-0>
+9. J. Ma, Y. He, F. Li, L. Han, C. You, B. Wang, Segment anything in medical images, Nat. Commun. 15 (2024) 654. <https://doi.org/10.1038/s41467-024-44824-z>
+10. H. Wang, S. Guo, J. Ye, Z. Deng, J. Cheng, T. Li, et al., SAM-Med3D: a vision foundation model for general-purpose segmentation on volumetric medical images, IEEE Trans. Neural Netw. Learn. Syst. 36 (2025) 17599–17612. <https://doi.org/10.1109/tnnls.2025.3586694>
+11. S.J. Simons, B.W. Papież, SpineFM: leveraging foundation models for automatic spine X-ray segmentation, 2025 IEEE 22nd International Symposium on Biomedical Imaging (ISBI), 2025, pp. 1–4. <https://doi.org/10.1109/isbi60581.2025.10980854>
+12. A. Jamaludin, T. Kadir, A. Zisserman, SpineNet: automated classification and evidence visualization in spinal MRIs, Med. Image Anal. 41 (2017) 63–73. <https://doi.org/10.1016/j.media.2017.07.002>
+13. R. Dong, X. Cheng, M. Kang, Y. Qu, Classification of lumbar spine disorders using large language models and MRI segmentation, BMC Med. Inform. Decis. Mak. 24 (2024) 343. <https://doi.org/10.1186/s12911-024-02740-8>
+14. F. Galbusera, A. Cina, T. Bassani, M. Panico, L.M. Sconfienza, Automatic diagnosis of spinal disorders on radiographic images: leveraging existing unstructured datasets with natural language processing, Global Spine J. 13 (2023) 1257–1266. <https://doi.org/10.1177/21925682211026910>
+15. R. Khazanchi, A.R. Chen, P. Desai, D. Herrera, J.R. Staub, M.A. Follett, et al., Assessing the ability of large language models to simplify lumbar spine imaging reports into patient-facing text: a pilot study of GPT-4, Skeletal Radiol. 55 (2026) 361–366. <https://doi.org/10.1007/s00256-025-05027-9>
+16. I.J. Kuckelman, K. Wetley, P.H. Yi, A.B. Ross, Translating musculoskeletal radiology reports into patient-friendly summaries using ChatGPT-4, Skeletal Radiol. 53 (2024) 1621–1624. <https://doi.org/10.1007/s00256-024-04599-2>
+17. S. Salem, A. Habib, M. Raza, Z. Al-Huda, O. Al-Maqtari, B. Ertuğrul, et al., AutoSpineAI: lightweight multimodal CAD framework for lumbar spine MRI assessments, 2025 IEEE EMBS International Conference on Biomedical and Health Informatics (BHI), 2025, pp. 1–7. <https://doi.org/10.1109/bhi67747.2025.11269503>
+18. M. Yeasin, K.A. Moinuddin, F. Havugimana, L. Wang, P. Park, Auto-Rad: end-to-end report generation from lumber spine MRI using vision-language model, J. Clin. Med. 13 (2024) 7092. <https://doi.org/10.3390/jcm13237092>
+19. J. Park, K. Han, J.S. Oh, H.D. Chae, A. Kim, S.Y. Park, et al., Prospective evaluation of artificial intelligence (AI) in lumbar spine magnetic resonance imaging (MRI) workflow: from deep learning (DL)-enhanced accelerated acquisition to simultaneous vision-language model (VLM)-based automated report generation, Eur. J. Radiol. 196 (2026) 112695. <https://doi.org/10.1016/j.ejrad.2026.112695>
+20. A. Sellergren, S. Kazemzadeh, T. Jaroensri, A. Kiraly, M. Traverse, T. Kohlberger, et al., MedGemma technical report, arXiv [Preprint] (2025). <https://doi.org/10.48550/arXiv.2507.05201>
+21. A. Sellergren, C. Gao, F. Mahvar, T. Kohlberger, F. Jamil, M. Traverse, et al., MedGemma 1.5 technical report, arXiv [Preprint] (2026). <https://doi.org/10.48550/arXiv.2604.05081>
+22. M. Hu, J. Qian, S. Pan, Y. Li, R.L.J. Qiu, X. Yang, Advancing medical imaging with language models: featuring a spotlight on ChatGPT, Phys. Med. Biol. 69 (2024) 10TR01. <https://doi.org/10.1088/1361-6560/ad387d>
+23. A. Wang, C. Zou, S. Yuan, N. Fan, P. Du, T. Wang, et al., Deep learning assisted segmentation of the lumbar intervertebral disc: a systematic review and meta-analysis, J. Orthop. Surg. Res. 19 (2024) 496. <https://doi.org/10.1186/s13018-024-05002-5>
+24. S. Lee, J.-Y. Jung, A. Mahatthanatrakul, J.-S. Kim, Artificial intelligence in spinal imaging and patient care: a review of recent advances, Neurospine 21 (2024) 474–486. <https://doi.org/10.14245/ns.2448388.194>
+25. A. Cina, F. Galbusera, Advancing spine care through AI and machine learning: overview and applications, EFORT Open Rev. 9 (2024) 422–433. <https://doi.org/10.1530/EOR-24-0019>
+26. W. Liawrungrueang, J.-B. Park, W. Cholamjiak, P. Sarasombath, K.D. Riew, Artificial intelligence-assisted MRI diagnosis in lumbar degenerative disc disease: a systematic review, Global Spine J. 15 (2025) 1405–1418. <https://doi.org/10.1177/21925682241274372>
+27. W. Tang, R. Chen, X. Long, D. Yu, S. Zhao, B. Chen, Medical large language models and systems in the clinical application of spinal diseases: current status, challenges, and future prospects, J. Orthop. Transl. 57 (2026) 101050. <https://doi.org/10.1016/j.jot.2026.101050>
+28. M.J. Page, J.E. McKenzie, P.M. Bossuyt, I. Boutron, T.C. Hoffmann, C.D. Mulrow, et al., The PRISMA 2020 statement: an updated guideline for reporting systematic reviews, BMJ 372 (2021) n71. <https://doi.org/10.1136/bmj.n71>
+29. A.S. Tejani, M.E. Klontzas, A.A. Gatti, J.T. Mongan, L. Moy, S.H. Park, et al., Checklist for Artificial Intelligence in Medical Imaging (CLAIM): 2024 update, Radiol. Artif. Intell. 6 (2024) e240300. <https://doi.org/10.1148/ryai.240300>
+30. J. Steurer, S. Roner, R. Gnannt, J. Hodler, Quantitative radiologic criteria for the diagnosis of lumbar spinal stenosis: a systematic literature review, BMC Musculoskelet. Disord. 12 (2011) 175. <https://doi.org/10.1186/1471-2474-12-175>
+31. T. Hasegawa, H.S. An, V.M. Haughton, B.H. Nowicki, Lumbar foraminal stenosis: critical heights of the intervertebral discs and foramina. A cryomicrotome study in cadavera, J. Bone Joint Surg. Am. 77 (1995) 32–38. <https://doi.org/10.2106/00004623-199501000-00005>
+32. A. Dosovitskiy, L. Beyer, A. Kolesnikov, D. Weissenborn, X. Zhai, T. Unterthiner, et al., An image is worth 16x16 words: transformers for image recognition at scale, International Conference on Learning Representations (ICLR), 2021. <https://doi.org/10.48550/arXiv.2010.11929>
+33. Gemma Team, Gemma 3 technical report, arXiv [Preprint] (2025). <https://doi.org/10.48550/arXiv.2503.19786>
+34. Z. Zhu, Y. Zhang, X. Zhuang, F. Zhang, Z. Wan, Y. Chen, et al., Can we trust AI doctors? A survey of medical hallucination in large language and large vision-language models, Findings of the Association for Computational Linguistics: ACL 2025, 2025, pp. 6748–6769. <https://doi.org/10.18653/v1/2025.findings-acl.350>
+35. J.T. P.D. Hallinan, L. Zhu, K. Yang, A. Makmur, D.A.R. Algazwi, Y.L. Thian, et al., Deep learning model for automated detection and classification of central canal, lateral recess, and neural foraminal stenosis at lumbar spine MRI, Radiology 300 (2021) 130–138. <https://doi.org/10.1148/radiol.2021204289>
+36. A. Wang, T. Wang, X. Liu, N. Fan, S. Yuan, P. Du, et al., Automated diagnosis and grading of lumbar intervertebral disc degeneration based on a modified YOLO framework, Front. Bioeng. Biotechnol. 13 (2025) 1526478. <https://doi.org/10.3389/fbioe.2025.1526478>
+37. M. Zhao, N. Meng, J.P.Y. Cheung, C. Yu, P. Lu, T. Zhang, SpineHRformer: a transformer-based deep learning model for automatic spine deformity assessment with prospective validation, Bioengineering (Basel) 10 (2023) 1333. <https://doi.org/10.3390/bioengineering10111333>
+38. G. Ghobrial, C. Roth, Deep learning-based automated segmentation and quantification of the dural sac cross-sectional area in lumbar spine MRI, Front. Radiol. 5 (2025) 1503625. <https://doi.org/10.3389/fradi.2025.1503625>
+39. M.A. Mazurowski, H. Dong, H. Gu, J. Yang, N. Konz, Y. Zhang, Segment anything model for medical image analysis: an experimental study, Med. Image Anal. 89 (2023) 102918. <https://doi.org/10.1016/j.media.2023.102918>
+40. C. Wu, X. Zhang, Y. Zhang, H. Hui, Y. Wang, W. Xie, Towards generalist foundation model for radiology by leveraging web-scale 2D\&3D medical data, Nat. Commun. 16 (2025) 7866. <https://doi.org/10.1038/s41467-025-62385-7>
+41. C. Li, C. Wong, S. Zhang, N. Usuyama, H. Liu, J. Yang, et al., LLaVA-Med: training a large language-and-vision assistant for biomedicine in one day, Advances in Neural Information Processing Systems 36 (NeurIPS 2023), 2023, pp. 28541–28564. <https://doi.org/10.52202/075280-1240>
+42. S. Zhang, Y. Xu, N. Usuyama, H. Xu, J. Bagga, R. Tinn, et al., A multimodal biomedical foundation model trained from fifteen million image-text pairs, NEJM AI 2 (2025). <https://doi.org/10.1056/AIoa2400640>
+43. M. Moor, Q. Huang, S. Wu, M. Yasunaga, Y. Dalmia, J. Leskovec, et al., Med-Flamingo: a multimodal medical few-shot learner, Proceedings of the 3rd Machine Learning for Health Symposium, PMLR 225, 2023, pp. 353–367. <https://proceedings.mlr.press/v225/moor23a.html>
+44. C. Zhang, Z. Li, P. Li, X. Cui, S. Xia, W. Yan, et al., SpineBench: benchmarking multimodal LLMs for spinal pathology analysis, Proceedings of the 33rd ACM International Conference on Multimedia, 2025, pp. 12729–12736. <https://doi.org/10.1145/3746027.3758212>
+45. B. Subramanian, N. Kumarasami, P. Shastry, R. Sripadraj, K. Sivasailam, A. D, et al., AI-driven MRI spine pathology detection: a comprehensive deep learning approach for automated diagnosis in diverse clinical settings, arXiv [Preprint] (2025). <https://doi.org/10.48550/arXiv.2503.20316>
+46. A. Kirillov, E. Mintun, N. Ravi, H. Mao, C. Rolland, L. Gustafson, et al., Segment anything, 2023 IEEE/CVF International Conference on Computer Vision (ICCV), 2023, pp. 3992–4003. <https://doi.org/10.1109/ICCV51070.2023.00371>
+47. A. Hatamizadeh, V. Nath, Y. Tang, D. Yang, H.R. Roth, D. Xu, Swin UNETR: Swin transformers for semantic segmentation of brain tumors in MRI images, Brainlesion: Glioma, Multiple Sclerosis, Stroke and Traumatic Brain Injuries, Lecture Notes in Computer Science, vol. 12962, 2022, pp. 272–284. <https://doi.org/10.1007/978-3-031-08999-2_22>
+48. Y. Xin, G.C. Ates, K. Gong, W. Shao, Med3DVLM: an efficient vision-language model for 3D medical image analysis, IEEE J. Biomed. Health Inform. 30 (2026) 2524–2536. <https://doi.org/10.1109/JBHI.2025.3604595>
+49. OpenAI, GPT-4 technical report, arXiv [Preprint] (2023). <https://doi.org/10.48550/arXiv.2303.08774>
+50. A. Sekuboyina, M.E. Husseini, A. Bayat, M. Löffler, H. Liebl, H. Li, et al., VerSe: a vertebrae labelling and segmentation benchmark for multi-detector CT images, Med. Image Anal. 73 (2021) 102166. <https://doi.org/10.1016/j.media.2021.102166>
+51. B.H. Cho, D. Kaji, Z.B. Cheung, I.B. Ye, R. Tang, A. Ahn, et al., Automated measurement of lumbar lordosis on radiographs using machine learning and computer vision, Global Spine J. 10 (2020) 611–618. <https://doi.org/10.1177/2192568219868190>
+52. P. Basak, R. Sarmun, S. Kabir, I. Al-Hashimi, E.H. Bhuiyan, A. Hasan, et al., Machine-agnostic automated lumbar MRI segmentation using a cascaded model based on generative neurons, Expert Syst. Appl. 264 (2025) 125862. <https://doi.org/10.1016/j.eswa.2024.125862>
+53. J. Qian, G. Su, X. Shu, K. Shen, B. Chen, X. Wang, Lumbar disc herniation diagnosis using deep learning on MRI, J. Radiat. Res. Appl. Sci. 17 (2024) 100988. <https://doi.org/10.1016/j.jrras.2024.100988>
+54. M. Monzon, T. Iff, E. Konukoglu, C.R. Jutzeler, Diffusion-based semantic segmentation of lumbar spine MRI scans of lower back pain patients, arXiv [Preprint] (2024). <https://doi.org/10.48550/arXiv.2411.10755>
+55. R.F. Masood, I.A. Taj, M.B. Khan, M.A. Qureshi, T. Hassan, Deep learning-based vertebral body segmentation with extraction of spinal measurements and disorder disease classification, Biomed. Signal Process. Control 71 (2022) 103230. <https://doi.org/10.1016/j.bspc.2021.103230>
+56. N. Lessmann, B. van Ginneken, P.A. de Jong, I. Išgum, Iterative fully convolutional neural networks for automatic vertebra segmentation and identification, Med. Image Anal. 53 (2019) 142–155. <https://doi.org/10.1016/j.media.2019.02.005>
+57. L. S V V, S.E. Darmanayagam, S.R.R. Cyril, Semantic segmentation of lumbar vertebrae using Meijering U-Net (MU-Net) on spine magnetic resonance images, Comput. Model. Eng. Sci. 142 (2025) 733–757. <https://doi.org/10.32604/cmes.2024.056424>
+58. M.K. Ahmed, F. Havugimana, K.A. Moinudin, M. Yeasin, MU-Net: modified U-Net for precise localization and segmentation of lumber-spine regions from sagittal views, Pattern Recognition: 27th International Conference, ICPR 2024, Lecture Notes in Computer Science, vol. 15311, 2025, pp. 175–190. <https://doi.org/10.1007/978-3-031-78195-7_12>
+59. F. Streckenbach, G. Leifert, T. Beyer, A. Mesanovic, H. Wäscher, D. Cantré, et al., Application of a deep learning approach to analyze large-scale MRI data of the spine, Healthcare (Basel) 10 (2022) 2132. <https://doi.org/10.3390/healthcare10112132>
+60. Z. Zhang, T. Liu, G. Fan, Y. Pu, B. Li, X. Chen, et al., Verdiff-Net: a conditional diffusion framework for spinal medical image segmentation, Bioengineering (Basel) 11 (2024) 1031. <https://doi.org/10.3390/bioengineering11101031>
+61. J.W. van der Graaf, L. Brundel, M.L. van Hooff, M. de Kleuver, N. Lessmann, B.J. Maresch, et al., AI-based lumbar central canal stenosis classification on sagittal MR images is comparable to experienced radiologists using axial images, Eur. Radiol. 35 (2024) 2298–2306. <https://doi.org/10.1007/s00330-024-11080-0>
+62. H. Suzuki, T. Kokabu, K. Yamada, Y. Ishikawa, A. Yabu, Y. Yanagihashi, et al., Deep learning-based detection of lumbar spinal canal stenosis using convolutional neural networks, Spine J. 24 (2024) 2086–2101. <https://doi.org/10.1016/j.spinee.2024.06.009>
+63. N. Tong, S. Gou, Y. Yang, B. Liu, Y. Bai, J. Liu, et al., Fully automatic fine-grained grading of lumbar intervertebral disc degeneration using regional feature recalibration network, IEEE J. Biomed. Health Inform. 28 (2024) 3042–3054. <https://doi.org/10.1109/JBHI.2024.3366780>
+64. F. Natalia, S. Sudirman, D. Ruslim, A. Al-Kafri, Lumbar spine MRI annotation with intervertebral disc height and Pfirrmann grade predictions, PLoS One 19 (2024) e0302067. <https://doi.org/10.1371/journal.pone.0302067>
+65. D.S. Tan, H. Nisar, K.H. Yeap, V. Dakulagi, M. Amin, Lumbar intervertebral disc detection and classification with novel deep learning models, J. King Saud Univ. Comput. Inf. Sci. 36 (2024) 102148. <https://doi.org/10.1016/j.jksuci.2024.102148>
+66. S. Liu, C. Guo, Y. Zhao, C. Zhang, L. Yue, R. Yao, et al., A machine learning based quantification system for automated diagnosis of lumbar spondylolisthesis on spinal X-rays, Heliyon 10 (2024) e37418. <https://doi.org/10.1016/j.heliyon.2024.e37418>
+67. C. Xu, X. Liu, B. Bao, C. Liu, R. Li, T. Yang, et al., Two-stage deep learning model for diagnosis of lumbar spondylolisthesis based on lateral X-ray images, World Neurosurg. 186 (2024) e652–e661. <https://doi.org/10.1016/j.wneu.2024.04.025>
+68. A. Vephasayanant, A. Jitpattanakul, P. Muneesawang, K. Wongpatikaseree, N. Hnoohom, YOLO-based image segmentation for the diagnostic of spondylolisthesis from lumbar spine X-ray images, IEEE Access 12 (2024) 182242–182258. <https://doi.org/10.1109/ACCESS.2024.3507354>
+69. S. Degadwala, V.N.D. Krishnamurthy, D. Vyas, DeepSpine: multi-class spine X-ray conditions classification using deep learning, 2024 3rd International Conference on Sentiment Analysis and Deep Learning (ICSADL), 2024, pp. 8–13. <https://doi.org/10.1109/ICSADL61749.2024.00008>
+70. R. Windsor, A. Jamaludin, T. Kadir, A. Zisserman, Automated detection, labelling and radiological grading of clinical spinal MRIs, Sci. Rep. 14 (2024) 14993. <https://doi.org/10.1038/s41598-024-64580-w>
+71. [dataset] S. Sudirman, A. Al Kafri, F. Natalia, H. Meidia, N. Afriliana, W. Al-Rashdan, et al., Lumbar spine MRI dataset, Mendeley Data, v2, 2019. <https://doi.org/10.17632/k57fr854j2.2>
+72. [dataset] S. Sudirman, A. Al Kafri, F. Natalia, H. Meidia, N. Afriliana, W. Al-Rashdan, et al., Label image ground truth data for lumbar spine MRI dataset, Mendeley Data, v2, 2019. <https://doi.org/10.17632/zbf6b4pttk.2>
+73. F. Natalia, H. Meidia, N. Afriliana, A.S. Al-Kafri, S. Sudirman, A. Simpson, et al., Development of ground truth data for automatic lumbar spine MRI image segmentation, 2018 IEEE 20th International Conference on High Performance Computing and Communications; IEEE 16th International Conference on Smart City; IEEE 4th International Conference on Data Science and Systems (HPCC/SmartCity/DSS), 2018, pp. 1449–1454. <https://doi.org/10.1109/HPCC/SmartCity/DSS.2018.00239>
+74. R.F. Masood, T. Hassan, H. Raja, B. Hassan, J. Dias, N. Werghi, A composite dataset of lumbar spine images with mid-sagittal view annotations and clinically significant spinal measurements, 2022 2nd International Conference on Digital Futures and Transformative Technologies (ICoDT2), 2022, pp. 1–5. <https://doi.org/10.1109/icodt255437.2022.9787452>
+75. [dataset] R.F. Masood, I.A. Taj, M. Talha, M.B. Khan, Multi-disorder annotations for lumbar spine mid-sagittal images, Mendeley Data, v1, 2025. <https://doi.org/10.17632/9j9hmy8kbn.1>
+76. M. Mushtaq, M.U. Akram, N.S. Alghamdi, J. Fatima, R.F. Masood, Localization and edge-based segmentation of lumbar spine vertebrae to identify the deformities using deep learning models, Sensors (Basel) 22 (2022) 1547. <https://doi.org/10.3390/s22041547>
+77. A.A. Prisilla, Y.L. Guo, Y.-K. Jan, C.-Y. Lin, F.-Y. Lin, B.-Y. Liau, et al., An approach to the diagnosis of lumbar disc herniation using deep learning models, Front. Bioeng. Biotechnol. 11 (2023) 1247112. <https://doi.org/10.3389/fbioe.2023.1247112>
+78. T.J. Richards, A.E. Flanders, E. Colak, L.M. Prevedello, R.L. Ball, F. Kitamura, et al., The RSNA Lumbar Degenerative Imaging Spine Classification (LumbarDISC) dataset, Radiol. Artif. Intell. 8 (2026) e250480. <https://doi.org/10.1148/ryai.250480>
+79. J. Liu, W. Zhang, Y. Zhou, L. Xu, Y.-H. Chu, F. Jia, An open-access lumbosacral spine MRI dataset with enhanced spinal nerve root structure resolution, Sci. Data 11 (2024) 1131. <https://doi.org/10.1038/s41597-024-03919-4>
+80. Y. Deng, C. Wang, Y. Hui, Q. Li, J. Li, S. Luo, et al., CTSpine1K: a large-scale dataset for spinal vertebrae segmentation in computed tomography, Mach. Learn. Biomed. Imaging 2025 (2025) 824–832. <https://doi.org/10.59275/j.melba.2025-gf84>
+81. J. Tian, K. Wang, P. Wu, J. Li, X. Zhang, X. Wang, Development of a deep learning model for detecting lumbar vertebral fractures on CT images: an external validation, Eur. J. Radiol. 180 (2024) 111685. <https://doi.org/10.1016/j.ejrad.2024.111685>
+82. Z. Han, B. Wei, S. Leung, I.B. Nachum, D. Laidley, S. Li, Automated pathogenesis-based diagnosis of lumbar neural foraminal stenosis via deep multiscale multitask learning, Neuroinformatics 16 (2018) 325–337. <https://doi.org/10.1007/s12021-018-9365-1>
+83. G. Garcia de Celis, W. Bukaita, Deep learning-based lumbar spinal canal stenosis classification using MRI scans, Med. Res. Arch. 13 (2025). <https://doi.org/10.18103/mra.v13i7.6660>
+84. M. Lootus, T. Kadir, A. Zisserman, Automated radiological grading of spinal MRI, Recent Advances in Computational Methods and Clinical Applications for Spine Imaging, Lecture Notes in Computational Vision and Biomechanics, vol. 20, 2015, pp. 119–130. <https://doi.org/10.1007/978-3-319-14148-0_11>
+85. D. Forsberg, E. Sjöblom, J.L. Sunshine, Detection and labeling of vertebrae in MR images using deep learning with clinical annotations as training data, J. Digit. Imaging 30 (2017) 406–412. <https://doi.org/10.1007/s10278-017-9945-x>
+86. Y. Kim, C. Song, G. Song, S.B. Kim, H.-W. Han, I. Han, Using natural language processing to identify low back pain in imaging reports, Appl. Sci. (Basel) 12 (2022) 12521. <https://doi.org/10.3390/app122412521>
+87. S. Biswas, L. McMenemy, V. Sarkar, J. MacArthur, E. Snowdon, C. Tetlow, et al., Natural language processing for the automated detection of intra-operative elements in lumbar spine surgery, Front. Surg. 10 (2023) 1271775. <https://doi.org/10.3389/fsurg.2023.1271775>
+88. S. He, Q. Li, X. Li, M. Zhang, Automatic aid diagnosis report generation for lumbar disc MR image based on lightweight artificial neural networks, Biomed. Signal Process. Control 86 (2023) 105275. <https://doi.org/10.1016/j.bspc.2023.105275>
+89. A.A. Prisilla, Y. Pusparani, W.-T. Chang, B.-Y. Liau, Y.-K. Jan, P. Ardhianto, et al., Automatic detection of lumbar disc herniation using YOLOv7, 2023 International Conference on Consumer Electronics - Taiwan (ICCE-Taiwan), 2023, pp. 843–844. <https://doi.org/10.1109/ICCE-Taiwan58799.2023.10226718>
+90. R.Y. Park, R. Windsor, A. Jamaludin, A. Zisserman, Automated spinal MRI labelling from reports using a large language model, Medical Image Computing and Computer Assisted Intervention - MICCAI 2024, Lecture Notes in Computer Science, vol. 15005, 2024, pp. 101–111. <https://doi.org/10.1007/978-3-031-72086-4_10>
+91. J.T. Silveira, G.S., P.P. Kundapur, Automated lumbar spine segmentation in MRI using an enhanced U-Net with inception module and dual-output mechanism, Sci. Rep. 15 (2025) 39215. <https://doi.org/10.1038/s41598-025-20721-3>
+92. H. Ulutas, M.F. Erkoc, E. Ozbay, M.E. Sahin, M.O. Karakus, E. Yuce, Automated lumbar disc intensity classification from MRI scans using region-based CNNs and transformer models, Int. J. Imaging Syst. Technol. 35 (2025) e70229. <https://doi.org/10.1002/ima.70229>
+93. R.F. Masood, I.A. Taj, WELDE: a weighted ensemble loss with diversity enhancement for imbalanced object classification in medical imaging, Netw. Model. Anal. Health Inform. Bioinform. 15 (2026) 125. <https://doi.org/10.1007/s13721-026-00797-1>
+94. J. Wu, Y. Wang, Z. Zhong, W. Liao, N. Trayanova, Z. Jiao, et al., Vision-language foundation model for 3D medical imaging, npj Artif. Intell. 1 (2025) 17. <https://doi.org/10.1038/s44387-025-00015-9>
+95. T. Dettmers, A. Pagnoni, A. Holtzman, L. Zettlemoyer, QLoRA: efficient finetuning of quantized LLMs, Advances in Neural Information Processing Systems 36 (NeurIPS 2023), 2023, pp. 10088–10115. <https://doi.org/10.52202/075280-0441>
+96. G. Hinton, O. Vinyals, J. Dean, Distilling the knowledge in a neural network, arXiv [Preprint] (2015). <https://doi.org/10.48550/arXiv.1503.02531>
+97. Gemma Team, Gemma 4 technical report, arXiv [Preprint] (2026). <https://doi.org/10.48550/arXiv.2607.02770>

@@ -1,0 +1,23 @@
+structure,study,modality,dsc_mean,dsc_sd,ci95_low,ci95_high,test_data,source_key,location_in_source
+Vertebral bodies,Masood et al. (2022),MR,0.970,,,,"Composite mid-sagittal set, public",masood2022vertebral,Abstract
+Vertebral bodies,"Lessmann et al., CT (2019)",CT,0.949,0.021,,,"Four CT sets, three public",lessmann2019iterative,"Section 5.1, CT datasets"
+Vertebral bodies,"Lessmann et al., MR (2019)",MR,0.944,0.033,,,"Lumbar T2 set (23 scans), public",lessmann2019iterative,"Section 5.1, lumbar MR dataset"
+Vertebral bodies,"DeepSpine, Lu et al. (2018)",MR,0.930,0.020,,,Institutional; reference masks drawn as bounding rectangles,lu2018deepspine,"Results, lumbar vertebral detection"
+Vertebral bodies,"SPIDER, iterative instance segmentation (2024)",MR,0.930,0.050,,,"SPIDER sequestered test set, public",van2024lumbar,Table 5
+Vertebral bodies,"SpineFM, lumbar (2025)",XR,0.925,,,,"NHANES II lumbar radiographs, public",windsor2024spinefm,"Results, lumbar section"
+Vertebral bodies,"SPIDER, nnU-Net (2024)",MR,0.920,0.050,,,"SPIDER sequestered test set, public",van2024lumbar,Table 5
+Vertebral bodies,SpineSegDiff (2024; preprint),MR,0.920,0.020,,,"SPIDER, five-fold cross-validation",spinesegdiff,"Table 1, T1w + T2w input"
+Vertebral bodies,"VerSe 2020 best team, Chen D. (2021)",CT,0.912,,,,VerSe 2020 hidden test set,sekuboyina2021verse,"Results table, VerSe 2020, hidden phase"
+Vertebral bodies,"VerSe 2019 best team, Payer C. (2021)",CT,0.898,,,,VerSe 2019 hidden test set,sekuboyina2021verse,"Results table, VerSe 2019, hidden phase"
+Vertebral bodies,Cho et al. (2020),XR,0.821,,,,Institutional,cho2020lordosis,Abstract
+"Vertebral bodies and discs, one value",Basak et al. (2025),MR,0.910,,,,"34 subjects, 12 scanners; ten-fold cross-validation",basak2025machine,Abstract
+Intervertebral discs,SpineSegDiff (2024; preprint),MR,0.900,0.050,,,"SPIDER, five-fold cross-validation",spinesegdiff,"Table 1, T1w + T2w input"
+Intervertebral discs,"SPIDER, nnU-Net (2024)",MR,0.860,0.090,,,"SPIDER sequestered test set, public",van2024lumbar,Table 5
+Intervertebral discs,"SPIDER, iterative instance segmentation (2024)",MR,0.840,0.100,,,"SPIDER sequestered test set, public",van2024lumbar,Table 5
+Intervertebral discs,"Wang et al. (2024), pooled estimate of 16 studies",MR,0.900,,0.887,0.914,Meta-analysis,wang2024deep,Abstract
+Spinal canal,"SPIDER, iterative instance segmentation (2024)",MR,0.920,0.040,,,"SPIDER sequestered test set, public",van2024lumbar,Table 5
+Spinal canal,"SPIDER, nnU-Net (2024)",MR,0.920,0.030,,,"SPIDER sequestered test set, public",van2024lumbar,Table 5
+Spinal canal,SpineSegDiff (2024; preprint),MR,0.920,0.040,,,"SPIDER, five-fold cross-validation",spinesegdiff,"Table 1, T1w + T2w input"
+Herniated disc region,"Qian et al., sagittal (2024)",MR,0.774,0.193,,,"590 patients, retrospective; test group of 134",qian2024ldh,"Abstract, sagittal 2D"
+Several lumbar structures,"AutoSpineAI, sagittal (2025)",MR,0.976,,,,Not described,autospineai2025,Abstract
+Several lumbar structures,"AutoSpineAI, axial (2025)",MR,0.940,,,,Not described,autospineai2025,Abstract
